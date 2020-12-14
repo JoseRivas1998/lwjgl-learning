@@ -115,6 +115,10 @@ public class Window {
         return resized;
     }
 
+    public void setResized(boolean resized) {
+        this.resized = resized;
+    }
+
     public void setTitle(String title) {
         glfwSetWindowTitle(this.windowHandle, title);
         this.title = title;
