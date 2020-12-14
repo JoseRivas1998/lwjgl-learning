@@ -50,6 +50,10 @@ public class ShaderProgram {
         this.compiled = true;
     }
 
+    public int getAttribLocation(String name) {
+        return glGetAttribLocation(this.programId, name);
+    }
+
     public void link() {
         verifyCompiled();
         glLinkProgram(this.programId);

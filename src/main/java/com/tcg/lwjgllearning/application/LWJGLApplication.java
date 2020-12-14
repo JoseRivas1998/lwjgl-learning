@@ -39,9 +39,7 @@ public class LWJGLApplication implements Runnable {
 
     private void loop() {
 
-        GL.createCapabilities();
 
-        glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
         while (!this.window.shouldClose()) {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
