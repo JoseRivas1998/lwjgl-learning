@@ -23,9 +23,10 @@ public class ShaderProgram {
     /*
      * STATIC CREATORS
      */
-    public ShaderProgram buildShader(String vertexShader, String fragmentShader) {
+    public static ShaderProgram buildShader(String vertexShader, String fragmentShader) {
         ShaderProgram shaderProgram = new ShaderProgram();
         shaderProgram.compile(vertexShader, fragmentShader);
+        shaderProgram.link();
         return shaderProgram;
     }
 
@@ -46,11 +47,25 @@ public class ShaderProgram {
     public void compile(String vertexShader, String fragmentShader) {
         this.vertexShaderId = createShaderOfType(vertexShader, GL_VERTEX_SHADER);
         this.fragmentShaderId = createShaderOfType(fragmentShader, GL_FRAGMENT_SHADER);
+        this.compiled = true;
+    }
+
+    public void link() {
+        verifyCompiled();
+        glLinkProgram(this.programId);
+        verifyProgramIsLinked();
+
+        glDetachShader(this.programId, this.vertexShaderId);
+        glDetachShader(this.programId, this.fragmentShaderId);
+
+        validateProgram();
+
     }
 
     public void unbind() {
         glUseProgram(0);
     }
+
 
     /*
      * PRIVATE
@@ -61,7 +76,6 @@ public class ShaderProgram {
         glCompileShader(shaderId);
         verifyShaderIsCompiled(shaderId);
     }
-
     private int crateProgram() {
         final int programId;
         programId = glCreateProgram();
@@ -91,6 +105,21 @@ public class ShaderProgram {
     private void deleteProgram() {
         if (programId != NULL) {
             glDeleteProgram(this.programId);
+        }
+    }
+
+    private void validateProgram() {
+        glValidateProgram(this.programId);
+        if (glGetProgrami(this.programId, GL_VALIDATE_STATUS) == 0) {
+            final String programInfoLog = glGetProgramInfoLog(this.programId);
+            System.err.printf("Warning validating shader program: %s\n", programInfoLog);
+        }
+    }
+
+    private void verifyProgramIsLinked() {
+        if (glGetProgrami(programId, GL_LINK_STATUS) == 0) {
+            final String programInfoLog = glGetProgramInfoLog(this.programId);
+            throw new RuntimeException(String.format("Error linking code: %s", programInfoLog));
         }
     }
 
