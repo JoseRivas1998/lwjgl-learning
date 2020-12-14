@@ -17,7 +17,7 @@ public class ShaderProgram {
      */
 
     public ShaderProgram() {
-        programId = crateProgram();
+        programId = createProgram();
     }
 
     /*
@@ -80,7 +80,8 @@ public class ShaderProgram {
         glCompileShader(shaderId);
         verifyShaderIsCompiled(shaderId);
     }
-    private int crateProgram() {
+    
+    private int createProgram() {
         final int programId;
         programId = glCreateProgram();
         if (programId == NULL) {
