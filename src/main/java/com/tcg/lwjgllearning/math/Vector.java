@@ -22,6 +22,10 @@ public interface Vector<T extends Vector<T>> {
 
     T scalarScaleOutPlace(float scalar);
 
+    T scaleAndAddInPlace(float scalar, T v);
+
+    T scaleAndAddOutPlace(float scalar, T v);
+
     T inverse();
 
     float squareMagnitude();
@@ -57,8 +61,20 @@ public interface Vector<T extends Vector<T>> {
         return totalSum;
     }
 
-    T cross(T v);
+    default T cross(T v) {
+        throw new UnsupportedOperationException("This vector does not support the cross product.");
+    }
 
     float dot(T v);
+
+    default float cosAngleBetween(T v) {
+        return this.dot(v) / (this.magnitude() * v.magnitude());
+    }
+
+    default float angleBetween(T v) {
+        return MathUtils.acos(this.cosAngleBetween(v));
+    }
+
+    float[] asArray();
 
 }
