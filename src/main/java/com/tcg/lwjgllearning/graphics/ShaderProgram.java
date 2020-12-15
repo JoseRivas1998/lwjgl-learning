@@ -80,7 +80,7 @@ public class ShaderProgram {
         glCompileShader(shaderId);
         verifyShaderIsCompiled(shaderId);
     }
-    
+
     private int createProgram() {
         final int programId;
         programId = glCreateProgram();
