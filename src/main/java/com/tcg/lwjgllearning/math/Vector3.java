@@ -4,9 +4,9 @@ import java.util.Objects;
 
 public class Vector3 implements Vector<Vector3> {
 
-    private float x;
-    private float y;
-    private float z;
+    public float x;
+    public float y;
+    public float z;
 
     public Vector3(float x, float y, float z) {
         set(x, y, z);
@@ -129,8 +129,9 @@ public class Vector3 implements Vector<Vector3> {
 
     @Override
     public Vector3 rotateInPlace(Quaternion q) {
-        // TODO
-        return null;
+        final Quaternion rotated = q.applyRotation(Quaternion.fromVector(this));
+        this.set(rotated.x, rotated.y, rotated.z);
+        return this;
     }
 
     @Override
