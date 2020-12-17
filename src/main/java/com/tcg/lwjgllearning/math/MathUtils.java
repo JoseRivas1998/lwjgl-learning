@@ -4,6 +4,10 @@ public final class MathUtils {
 
     // Right now this class is just wrapping all the JDK math functions, but is used to allow for later optimization.
 
+    public static final float PI = (float) Math.PI;
+    public static final float PI2 = MathUtils.PI * 2;
+    public static final float HALF_PI = MathUtils.PI / 2;
+
     public static float sin(float radians) {
         return (float) Math.sin(radians);
     }
