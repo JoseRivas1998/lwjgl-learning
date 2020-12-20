@@ -16,6 +16,18 @@ public class Vector3 implements Vector<Vector3> {
         this(0f, 0f, 0f);
     }
 
+    public static Vector3 x() {
+        return new Vector3(1, 0, 0);
+    }
+
+    public static Vector3 y() {
+        return new Vector3(0, 1, 0);
+    }
+
+    public static Vector3 z() {
+        return new Vector3(0, 0, 1);
+    }
+
     @Override
     public Vector3 copy() {
         return new Vector3(this.x, this.y, this.z);

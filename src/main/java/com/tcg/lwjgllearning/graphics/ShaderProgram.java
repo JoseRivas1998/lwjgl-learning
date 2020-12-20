@@ -54,6 +54,10 @@ public class ShaderProgram {
         return glGetAttribLocation(this.programId, name);
     }
 
+    public int getUniformLocation(String name) {
+        return glGetUniformLocation(this.programId, name);
+    }
+
     public void link() {
         verifyCompiled();
         glLinkProgram(this.programId);

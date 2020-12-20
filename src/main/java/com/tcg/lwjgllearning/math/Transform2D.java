@@ -8,7 +8,8 @@ public class Transform2D {
     private float rotation;
     private final Vector2 scale;
 
-    private Matrix3 mWorld;
+    protected Matrix3 mWorld;
+
     private boolean needsUpdate;
 
     public Transform2D(Vector2 position, float rotation, Vector2 scale) {

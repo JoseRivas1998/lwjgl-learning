@@ -28,4 +28,12 @@ public final class MathUtils {
         return (float) Math.sqrt(x);
     }
 
+    public static float clamp(float x, float min, float max) {
+        return Math.max(min, Math.min(x, max));
+    }
+
+    public static float lerp(float a, float b, float t) {
+        return a + (t * (b - a));
+    }
+
 }
