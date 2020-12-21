@@ -18,8 +18,8 @@ public class LWJGLApplication implements Runnable {
     public LWJGLApplication(ApplicationListener applicationListener) {
         this.applicationListener = applicationListener;
         this.mainThreadName = String.format("game-thread-%s", UUID.randomUUID().toString());
-        mainThread = new Thread(this, mainThreadName);
-        mainThread.start();
+        this.mainThread = new Thread(this, this.mainThreadName);
+        this.mainThread.start();
     }
 
     @Override
@@ -30,10 +30,10 @@ public class LWJGLApplication implements Runnable {
 
         this.window.init();
 
-        applicationListener.create();
-        loop();
+        this.applicationListener.create();
+        this.loop();
 
-        applicationListener.close();
+        this.applicationListener.close();
         this.window.close();
     }
 
@@ -44,12 +44,12 @@ public class LWJGLApplication implements Runnable {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
             if (this.window.isResized()) {
-                applicationListener.resize(this.window.getWidth(), this.window.getHeight());
+                this.applicationListener.resize(this.window.getWidth(), this.window.getHeight());
                 this.window.setResized(false);
             }
 
-            applicationListener.update();
-            applicationListener.draw();
+            this.applicationListener.update();
+            this.applicationListener.draw();
 
             this.window.update();
         }

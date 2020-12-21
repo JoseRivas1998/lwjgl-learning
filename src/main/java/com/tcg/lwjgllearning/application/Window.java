@@ -43,22 +43,22 @@ public class Window {
     }
 
     public void close() {
-        glfwFreeCallbacks(windowHandle);
-        glfwDestroyWindow(windowHandle);
+        glfwFreeCallbacks(this.windowHandle);
+        glfwDestroyWindow(this.windowHandle);
         glfwTerminate();
         Objects.requireNonNull(glfwSetErrorCallback(null)).free();
     }
 
     public int getHeight() {
-        return height;
+        return this.height;
     }
 
     public String getTitle() {
-        return title;
+        return this.title;
     }
 
     public int getWidth() {
-        return width;
+        return this.width;
     }
 
     public void init() {
@@ -72,19 +72,19 @@ public class Window {
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
 
-        windowHandle = glfwCreateWindow(width, height, title, NULL, NULL);
+        this.windowHandle = glfwCreateWindow(this.width, this.height, this.title, NULL, NULL);
 
-        if (windowHandle == NULL) {
+        if (this.windowHandle == NULL) {
             throw new RuntimeException("Failed to create the glfw window");
         }
 
-        glfwSetKeyCallback(windowHandle, (window1, key, scancode, action, mods) -> {
+        glfwSetKeyCallback(this.windowHandle, (window1, key, scancode, action, mods) -> {
             if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE) {
-                glfwSetWindowShouldClose(windowHandle, true);
+                glfwSetWindowShouldClose(this.windowHandle, true);
             }
         });
 
-        glfwSetFramebufferSizeCallback(windowHandle, (window, width, height) -> {
+        glfwSetFramebufferSizeCallback(this.windowHandle, (window, width, height) -> {
             this.width = width;
             this.height = height;
             this.resized = true;
@@ -93,26 +93,31 @@ public class Window {
         GLFWVidMode vidMode = Objects.requireNonNull(glfwGetVideoMode(glfwGetPrimaryMonitor()));
 
         glfwSetWindowPos(
-                windowHandle,
+                this.windowHandle,
                 (vidMode.width() - this.width) / 2,
                 (vidMode.height() - this.height) / 2
         );
 
-        glfwMakeContextCurrent(windowHandle);
+        glfwMakeContextCurrent(this.windowHandle);
 
-        if (vSync) {
+        if (this.vSync) {
             glfwSwapInterval(1);
         }
 
-        glfwShowWindow(windowHandle);
+        glfwShowWindow(this.windowHandle);
 
         GL.createCapabilities();
 
-        clearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glEnable(GL_DEPTH_TEST);
+        glEnable(GL_CULL_FACE);
+        glFrontFace(GL_CCW);
+        glCullFace(GL_BACK);
+
+        this.clearColor(0.0f, 0.0f, 0.0f, 1.0f);
     }
 
     public boolean isResized() {
-        return resized;
+        return this.resized;
     }
 
     public void setResized(boolean resized) {
@@ -129,7 +134,7 @@ public class Window {
     }
 
     public void update() {
-        glfwSwapBuffers(windowHandle);
+        glfwSwapBuffers(this.windowHandle);
         glfwPollEvents();
     }
 
