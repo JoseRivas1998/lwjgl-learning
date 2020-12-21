@@ -22,14 +22,14 @@ public class Mesh extends Transform3D {
     protected final float[] positionArray;
     protected final float[] normalArray;
     protected final int[] indexArray;
-    private int mWorldUniformLocation;
-    private int mNormalUniformLocation;
-    private int positionAttribLocation;
-    private int normalAttribLocation;
-    private int vaoId;
-    private int positionVboId;
-    private int normalVboId;
-    private int indexVboId;
+    protected int mWorldUniformLocation;
+    protected int mNormalUniformLocation;
+    protected int positionAttribLocation;
+    protected int normalAttribLocation;
+    protected int vaoId;
+    protected int positionVboId;
+    protected int normalVboId;
+    protected int indexVboId;
 
     public Mesh(ShaderProgram shaderProgram, float[] positionArray, float[] normalArray, int[] indexArray, Vector3 position, Quaternion rotation, Vector3 scale) {
         super(position, rotation, scale);

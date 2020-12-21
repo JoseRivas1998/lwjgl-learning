@@ -4,6 +4,7 @@ import com.tcg.lwjgllearning.application.ApplicationAdapter;
 import com.tcg.lwjgllearning.application.LWJGLApplication;
 import com.tcg.lwjgllearning.graphics.Color;
 import com.tcg.lwjgllearning.graphics.ShaderProgram;
+import com.tcg.lwjgllearning.graphics.g3d.RGBMesh;
 import com.tcg.lwjgllearning.graphics.g3d.Shapes3D;
 import com.tcg.lwjgllearning.graphics.g3d.UniformColorMesh;
 import com.tcg.lwjgllearning.math.MathUtils;
@@ -26,6 +27,7 @@ public class Lab04 extends ApplicationAdapter {
     private Matrix4 viewMatrix;
     private Matrix4 projectionMatrix;
     private ShaderProgram uniformShader;
+    private ShaderProgram rgbShader;
     private final Vector3 ambientLight = new Vector3();
     private final Vector3 lightDirection = new Vector3();
     private final Vector3 lightIntensity = new Vector3();
@@ -34,6 +36,7 @@ public class Lab04 extends ApplicationAdapter {
     private Vector3 origin;
     private Quaternion orbit;
     private Quaternion localRot;
+    private RGBMesh rgbCube;
 
     @Override
     public void create() {
@@ -47,6 +50,11 @@ public class Lab04 extends ApplicationAdapter {
                 FileUtils.readFile("sample_shaders/lab04/frag.uniform.glsl")
         );
 
+        this.rgbShader = ShaderProgram.buildShader(
+                FileUtils.readFile("sample_shaders/lab04/vert.rgb.glsl"),
+                FileUtils.readFile("sample_shaders/lab04/frag.rgb.glsl")
+        );
+
         this.updateMatricesAndLighting(300, 300);
         final float[] cubePositionArray = Shapes3D.Box.positionArray();
         final float[] cubeNormalArray = Shapes3D.Box.normalArray();
@@ -57,6 +65,18 @@ public class Lab04 extends ApplicationAdapter {
                 Color.rgb888(0x8F43FF)
         );
         this.meshCube.translate(new Vector3(5, 0, 0));
+
+        final Color green = Color.rgb888(0x00FF00);
+        final Color red = Color.rgb888(0xFF0000);
+        final Color blue = Color.rgb888(0x0000FF);
+        final Color[] cubeColorArray = Shapes3D.Box.colors(green, green, red, red, blue, blue);
+        this.rgbCube = new RGBMesh(
+                this.rgbShader,
+                cubePositionArray,
+                cubeNormalArray,
+                cubeIndexArray,
+                cubeColorArray
+        );
 
         this.angle = MathUtils.PI / 100f;
         this.origin = Vector3.origin();
@@ -69,11 +89,16 @@ public class Lab04 extends ApplicationAdapter {
     public void update() {
         this.meshCube.rotateAround(this.origin, this.orbit, false);
         this.meshCube.localRotate(this.localRot);
+
+        this.rgbCube.localRotate(this.localRot);
+        this.rgbCube.rotateAround(this.origin, this.orbit, false);
+
     }
 
     @Override
     public void draw() {
         this.meshCube.draw();
+        this.rgbCube.draw();
     }
 
     @Override
@@ -90,7 +115,7 @@ public class Lab04 extends ApplicationAdapter {
     private void updateMatricesAndLighting(int width, int height) {
         this.updateViewMatrix();
         this.updateProjectionMatrix(width, height);
-        this.bindMatricesAndLightingToAllShaders(this.uniformShader);
+        this.bindMatricesAndLightingToAllShaders(this.uniformShader, this.rgbShader);
     }
 
     private void bindMatricesAndLightingToAllShaders(ShaderProgram... shaders) {

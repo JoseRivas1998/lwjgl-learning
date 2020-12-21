@@ -1,5 +1,7 @@
 package com.tcg.lwjgllearning.graphics.g3d;
 
+import com.tcg.lwjgllearning.graphics.Color;
+
 public class Shapes3D {
 
     public static class Box {
@@ -8,38 +10,38 @@ public class Shapes3D {
                     // top (+y)
                     -0.5f, 0.5f, -0.5f,
                     -0.5f, 0.5f, 0.5f,
-                    0.5f,  0.5f, 0.5f,
-                    0.5f,  0.5f, -0.5f,
+                    0.5f, 0.5f, 0.5f,
+                    0.5f, 0.5f, -0.5f,
 
                     // bottom (-y)
                     -0.5f, -0.5f, 0.5f,
                     -0.5f, -0.5f, -0.5f,
-                    0.5f,  -0.5f, -0.5f,
-                    0.5f,  -0.5f, 0.5f,
+                    0.5f, -0.5f, -0.5f,
+                    0.5f, -0.5f, 0.5f,
 
                     // left (-x)
-                    -0.5f, 0.5f,  -0.5f,
+                    -0.5f, 0.5f, -0.5f,
                     -0.5f, -0.5f, -0.5f,
                     -0.5f, -0.5f, 0.5f,
-                    -0.5f, 0.5f,  0.5f,
+                    -0.5f, 0.5f, 0.5f,
 
                     // right (+x)
-                    0.5f, 0.5f,  0.5f,
+                    0.5f, 0.5f, 0.5f,
                     0.5f, -0.5f, 0.5f,
                     0.5f, -0.5f, -0.5f,
-                    0.5f, 0.5f,  -0.5f,
+                    0.5f, 0.5f, -0.5f,
 
                     // back (-z)
-                    0.5f,  0.5f,  -0.5f,
-                    0.5f,  -0.5f, -0.5f,
+                    0.5f, 0.5f, -0.5f,
+                    0.5f, -0.5f, -0.5f,
                     -0.5f, -0.5f, -0.5f,
-                    -0.5f, 0.5f,  -0.5f,
+                    -0.5f, 0.5f, -0.5f,
 
                     // front (+z)
-                    -0.5f, 0.5f,  0.5f,
+                    -0.5f, 0.5f, 0.5f,
                     -0.5f, -0.5f, 0.5f,
-                    0.5f,  -0.5f, 0.5f,
-                    0.5f,  0.5f,  0.5f
+                    0.5f, -0.5f, 0.5f,
+                    0.5f, 0.5f, 0.5f
             };
         }
 
@@ -67,7 +69,7 @@ public class Shapes3D {
         }
 
         public static float[] normalArray() {
-            return new float[] {
+            return new float[]{
                     // top
                     0f, 1f, 0f,
                     0f, 1f, 0f,
@@ -103,6 +105,40 @@ public class Shapes3D {
                     0f, 0f, 1f,
                     0f, 0f, 1f,
                     0f, 0f, 1f
+            };
+        }
+
+        public static Color[] colors(Color top, Color bottom, Color left, Color right, Color back, Color front) {
+            return new Color[]{
+                    top.copy(),
+                    top.copy(),
+                    top.copy(),
+                    top.copy(),
+
+                    bottom.copy(),
+                    bottom.copy(),
+                    bottom.copy(),
+                    bottom.copy(),
+
+                    left.copy(),
+                    left.copy(),
+                    left.copy(),
+                    left.copy(),
+
+                    right.copy(),
+                    right.copy(),
+                    right.copy(),
+                    right.copy(),
+
+                    back.copy(),
+                    back.copy(),
+                    back.copy(),
+                    back.copy(),
+
+                    front.copy(),
+                    front.copy(),
+                    front.copy(),
+                    front.copy()
             };
         }
     }
