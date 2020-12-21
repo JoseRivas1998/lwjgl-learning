@@ -10,7 +10,7 @@ public class Quaternion {
     public float z;
 
     public Quaternion() {
-        this.set(0.0f, 0.0f, 0.0f, 0.0f);
+        this.set(0.0f, 1f, 0.0f, 0.0f);
     }
 
     public static Quaternion ofRotation(float theta, Vector3 rotationAxis, boolean normalized) {
