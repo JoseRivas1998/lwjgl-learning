@@ -18,27 +18,13 @@ public class MultiColorDrawable extends Drawable{
 
     public MultiColorDrawable(ShaderProgram shaderProgram, float[] positionArray, int[] indexArray, Color[] colors, Vector2 position, float rotation, Vector2 scale) {
         super(shaderProgram, positionArray, indexArray, position, rotation, scale);
-        this.colorArray = colorArrayToFloatArray(colors);
-
-        createColorBuffer();
+        this.colorArray = Color.colorArrayToFloatArray(colors);
+        this.createColorBuffer();
     }
 
 
     public MultiColorDrawable(ShaderProgram shaderProgram, float[] positionArray, int[] indexArray, Color[] colors) {
         this(shaderProgram, positionArray, indexArray, colors, new Vector2(0, 0), 0f, new Vector2(1, 1));
-    }
-
-    private float[] colorArrayToFloatArray(Color[] colors) {
-        final float[] colorArrayAsFloatArray = new float[colors.length * 4];
-        for (int i = 0; i < colors.length; i++) {
-            Color color = colors[i];
-            final int colorStart = i * 4;
-            colorArrayAsFloatArray[colorStart] = color.r;
-            colorArrayAsFloatArray[colorStart + 1] = color.g;
-            colorArrayAsFloatArray[colorStart + 2] = color.b;
-            colorArrayAsFloatArray[colorStart + 3] = color.a;
-        }
-        return colorArrayAsFloatArray;
     }
 
     private void createColorBuffer() {

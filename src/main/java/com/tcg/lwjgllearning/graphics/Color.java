@@ -69,6 +69,20 @@ public class Color {
         return new float[]{this.r, this.g, this.b, this.a};
     }
 
+
+    public static float[] colorArrayToFloatArray(Color[] colors) {
+        final float[] colorArrayAsFloatArray = new float[colors.length * 4];
+        for (int i = 0; i < colors.length; i++) {
+            Color color = colors[i];
+            final int colorStart = i * 4;
+            colorArrayAsFloatArray[colorStart] = color.r;
+            colorArrayAsFloatArray[colorStart + 1] = color.g;
+            colorArrayAsFloatArray[colorStart + 2] = color.b;
+            colorArrayAsFloatArray[colorStart + 3] = color.a;
+        }
+        return colorArrayAsFloatArray;
+    }
+
     @Override
     public boolean equals(Object obj) {
         boolean result = this == obj;
