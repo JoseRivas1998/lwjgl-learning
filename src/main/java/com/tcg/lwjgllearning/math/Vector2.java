@@ -16,6 +16,10 @@ public class Vector2 implements Vector<Vector2> {
         this(0f, 0f);
     }
 
+    public static Vector2 origin() {
+        return new Vector2(0, 0);
+    }
+
     public static Vector2 x() {
         return new Vector2(1, 0);
     }
