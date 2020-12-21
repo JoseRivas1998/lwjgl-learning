@@ -29,7 +29,7 @@ public abstract class Drawable extends Transform2D {
         this.shaderProgram = shaderProgram;
         this.positionArray = Arrays.copyOf(positionArray, positionArray.length);
         this.indexArray = Arrays.copyOf(indexArray, indexArray.length);
-        createBuffers();
+        this.createBuffers();
     }
 
     public Drawable(ShaderProgram shaderProgram, float[] positionArray, int[] indexArray) {
@@ -52,7 +52,7 @@ public abstract class Drawable extends Transform2D {
             final int positionVboId = glGenBuffers();
             glBindBuffer(GL_ARRAY_BUFFER, positionVboId);
             glBufferData(GL_ARRAY_BUFFER, positionBuffer, GL_STATIC_DRAW);
-            positionAttribLocation = this.shaderProgram.getAttribLocation("vertPosition");
+            this.positionAttribLocation = this.shaderProgram.getAttribLocation("vertPosition");
             glEnableVertexAttribArray(this.positionAttribLocation);
             glVertexAttribPointer(this.positionAttribLocation, 2, GL_FLOAT, false, 0, 0);
 
