@@ -90,6 +90,50 @@ public class Matrix4 {
         return Matrix4.prod(translation, rotation, scale);
     }
 
+    public static Matrix4 view(Vector3 eye, Vector3 target, Vector3 up) {
+        final Vector3 back = eye.subOutPlace(target).normalizeOutPlace();
+        final Vector3 right = up.cross(back).normalizeOutPlace();
+        final Vector3 up1 = back.cross(right);
+
+        final float rightDotEye = right.dot(eye);
+        final float upDotEye = up1.dot(eye);
+        final float backDotEye = back.dot(eye);
+
+        return new Matrix4(new float[]{
+                right.x, up1.x, back.x, 0f,
+                right.y, up1.y, back.y, 0f,
+                right.z, up1.z, back.z, 0f,
+                -rightDotEye, -upDotEye, -backDotEye, 1f
+        });
+    }
+
+    public static Matrix4 perspective(float viewRadians, float aspect, float near, float far) {
+        final float oneOverTanThetaOverTwo = 1f / MathUtils.tan(viewRadians / 2f);
+        final float nPlusF = near + far;
+        final float nMinusF = near - far;
+        final float twoNF = 2f * near * far;
+        return new Matrix4(new float[]{
+                oneOverTanThetaOverTwo / aspect, 0f, 0f, 0f,
+                0f, oneOverTanThetaOverTwo, 0f, 0f,
+                0f, 0f, nPlusF / nMinusF, -1f,
+                0f, 0f, twoNF / nMinusF, 0f
+        });
+    }
+
+    public static Matrix4 orthographic(float near, float far, float bottom, float top, float right, float left) {
+        final float rightMinusLeft = right - left;
+        final float topMinusBottom = top - bottom;
+        final float farMinusNear = far - near;
+        final float topPlusBottom = top + bottom;
+        final float farPlusNear = far + near;
+        return new Matrix4(new float[]{
+                2f / rightMinusLeft, 0f, 0f, 0f,
+                0, 2f / topMinusBottom, 0f, 0f,
+                0f, 0f, -2f / farMinusNear, 0f,
+                -(right + left) / rightMinusLeft, -topPlusBottom / topMinusBottom, -farPlusNear / farMinusNear, 1f
+        });
+    }
+
     public float[] asArray() {
         return Arrays.copyOf(this.mat, MATRIX_LENGTH);
     }
