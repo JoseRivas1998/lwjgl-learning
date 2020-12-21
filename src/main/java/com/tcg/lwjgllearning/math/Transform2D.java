@@ -96,6 +96,6 @@ public class Transform2D {
 
     @Override
     public String toString() {
-        return String.format("Position: %s, Rotation: %s, Scale: %s", this.position, this.rotation, this.scale);
+        return String.format("Position: %s, Rotation: %f, Scale: %s", this.position, this.rotation, this.scale);
     }
 }

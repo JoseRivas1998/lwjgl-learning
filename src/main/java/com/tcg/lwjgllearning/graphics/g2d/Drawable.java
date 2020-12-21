@@ -83,7 +83,7 @@ public abstract class Drawable extends Transform2D {
 
         glBindVertexArray(this.vaoId);
 
-        glUniformMatrix3fv(this.mWorldUniformLocation, false, this.mWorld.asArray());
+        glUniformMatrix3fv(this.mWorldUniformLocation, false, this.worldMatrix());
 
 
     }

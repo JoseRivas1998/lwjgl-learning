@@ -28,6 +28,10 @@ public class Vector3 implements Vector<Vector3> {
         return new Vector3(0, 0, 1);
     }
 
+    public static Vector3 origin() {
+        return new Vector3(0, 0, 0);
+    }
+
     @Override
     public Vector3 copy() {
         return new Vector3(this.x, this.y, this.z);
