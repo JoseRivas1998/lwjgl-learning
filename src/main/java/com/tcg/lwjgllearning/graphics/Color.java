@@ -39,7 +39,7 @@ public class Color {
         final float g = MathUtils.lerp(c1.g, c2.g, t);
         final float b = MathUtils.lerp(c1.b, c2.b, t);
         final float a = MathUtils.lerp(c1.a, c2.a, t);
-        return new Color(r, b, b, a);
+        return new Color(r, g, b, a);
     }
 
     public Color copy() {
@@ -67,13 +67,6 @@ public class Color {
 
     public float[] asArray() {
         return new float[]{this.r, this.g, this.b, this.a};
-    }
-
-    private void clamp() {
-        this.r = MathUtils.clamp(this.r, 0f, 1f);
-        this.g = MathUtils.clamp(this.g, 0f, 1f);
-        this.b = MathUtils.clamp(this.b, 0f, 1f);
-        this.a = MathUtils.clamp(this.a, 0f, 1f);
     }
 
     @Override
