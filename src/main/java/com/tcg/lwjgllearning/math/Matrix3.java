@@ -81,6 +81,18 @@ public class Matrix3 {
         return Matrix3.prod(T, R, S);
     }
 
+    public static Matrix3 normal(Matrix4 rotation, Vector3 scale) {
+        final float x = (Float.compare(scale.x, 0) == 0 ? 1f : 1f / scale.x);
+        final float y = (Float.compare(scale.y, 0) == 0 ? 1f : 1f / scale.y);
+        final float z = (Float.compare(scale.z, 0) == 0 ? 1f : 1f / scale.z);
+        final float[] R = rotation.asArray();
+        return new Matrix3(new float[]{
+                R[0] * x, R[1] * x, R[2] * x,
+                R[4] * y, R[5] * y, R[6] * y,
+                R[8] * z, R[9] * z, R[10] * z
+        });
+    }
+
     public float[] asArray() {
         return Arrays.copyOf(this.mat, MATRIX_LENGTH);
     }

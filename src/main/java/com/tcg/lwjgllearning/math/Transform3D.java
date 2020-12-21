@@ -11,7 +11,8 @@ public class Transform3D {
     private Matrix4 mTranslate;
     private Matrix4 mRotate;
     private Matrix4 mScale;
-    private Matrix4 mWorld;
+    protected Matrix4 mWorld;
+    protected Matrix3 mNormal;
 
     private boolean hasMoved;
     private boolean hasRotated;
@@ -22,14 +23,15 @@ public class Transform3D {
         this.position = Objects.requireNonNull(position).copy();
         this.rotation = Objects.requireNonNull(rotation).copy();
         this.scale = Objects.requireNonNull(scale).copy();
-        mTranslate = Matrix4.translation(this.position);
-        mRotate = Matrix4.rotation(this.rotation);
-        mScale = Matrix4.scale(this.scale);
-        mWorld = Matrix4.worldMatrix(this.mTranslate, this.mRotate, this.mScale);
-        hasMoved = false;
-        hasRotated = false;
-        hasScaled = false;
-        needsUpdate = false;
+        this.mTranslate = Matrix4.translation(this.position);
+        this.mRotate = Matrix4.rotation(this.rotation);
+        this.mScale = Matrix4.scale(this.scale);
+        this.mWorld = Matrix4.worldMatrix(this.mTranslate, this.mRotate, this.mScale);
+        this.mNormal = Matrix3.normal(this.mRotate, this.scale);
+        this.hasMoved = false;
+        this.hasRotated = false;
+        this.hasScaled = false;
+        this.needsUpdate = false;
     }
 
     public Transform3D() {
@@ -117,17 +119,29 @@ public class Transform3D {
         }
     }
 
+    private void updateNormalMatrix() {
+        this.mNormal = Matrix3.normal(this.mRotate, this.scale);
+    }
+
     public void update() {
         if (this.needsUpdate) {
+            final boolean needsNormalUpdate = this.hasRotated || this.hasScaled;
             this.updateTranslationMatrix();
             this.updateRotationMatrix();
             this.updateScaleMatrix();
             this.updateWorldMatrix();
+            if (needsNormalUpdate) {
+                this.updateNormalMatrix();
+            }
         }
     }
 
     public float[] worldMatrix() {
         return this.mWorld.asArray();
+    }
+
+    public float[] normalMatrix() {
+        return this.mNormal.asArray();
     }
 
     @Override
