@@ -1,6 +1,11 @@
 package com.tcg.lwjgllearning.graphics.g3d;
 
 import com.tcg.lwjgllearning.graphics.Color;
+import com.tcg.lwjgllearning.math.MathUtils;
+import com.tcg.lwjgllearning.utils.ListUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Shapes3D {
 
@@ -232,6 +237,64 @@ public class Shapes3D {
                     onHalf, twoThirds,
                     onHalf, oneThird
             };
+        }
+
+    }
+
+    public static class Sphere {
+        public static float[] positionArray(int latBands, int longBands) {
+            final List<Float> pos = new ArrayList<>();
+            for (int lat = 0; lat <= latBands; lat++)
+            {
+                final float theta = (float) lat * MathUtils.PI / latBands;
+                final float sinTheta = MathUtils.sin(theta);
+                final float cosTheta = MathUtils.cos(theta);
+
+                for (int lon = 0; lon <= longBands; lon++)
+                {
+                    final float phi = (float) lon * 2f * MathUtils.PI / longBands;
+                    final float sinPhi = MathUtils.sin(phi);
+                    final float cosPhi = MathUtils.cos(phi);
+
+                    final float x = sinTheta * sinPhi;
+                    final float y = cosTheta;
+                    final float z = sinTheta * cosPhi;
+
+                    pos.add(x);
+                    pos.add(y);
+                    pos.add(z);
+                }
+            }
+            return ListUtils.floatListToArray(pos);
+        }
+
+        public static float[] normalArray(int latBands, int longBands) {
+            return Sphere.positionArray(latBands, longBands);
+        }
+
+        public static int[] indexArray(int latBands, int longBands) {
+            final List<Integer> ind = new ArrayList<>();
+            for (var lat = 0; lat < latBands; lat++)
+            {
+                for (int lon = 0; lon < longBands; lon++)
+                {
+                    var topLeftIndex = lat * (longBands + 1) + lon;
+                    var topRightIndex = topLeftIndex + 1;
+                    var bottomLeftIndex = topLeftIndex + longBands + 1;
+                    var bottomRightIndex = bottomLeftIndex + 1;
+
+                    // top left triangle
+                    ind.add(topLeftIndex);
+                    ind.add(bottomLeftIndex);
+                    ind.add(topRightIndex);
+
+                    // bottom right triangle
+                    ind.add(bottomLeftIndex);
+                    ind.add(bottomRightIndex);
+                    ind.add(topRightIndex);
+                }
+            }
+            return ListUtils.intListToArray(ind);
         }
 
     }

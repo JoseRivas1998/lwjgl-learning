@@ -4,6 +4,7 @@ import com.tcg.lwjgllearning.graphics.Color;
 import com.tcg.lwjgllearning.graphics.ShaderProgram;
 import com.tcg.lwjgllearning.graphics.g3d.RGBMesh;
 import com.tcg.lwjgllearning.graphics.g3d.UniformColorMesh;
+import com.tcg.lwjgllearning.utils.ListUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
@@ -15,14 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class STLModel {
-
-    private static final int FLOATS_PER_TRIANGLE = 9;
-    private static final int FLOATS_PER_VERTEX = 3;
-    private static final int VERTICES_PER_TRIANGLE = 3;
-    private float[] vertices;
-    private float[] normals;
-    private int[] indices;
+public class STLModel extends Model {
 
     public STLModel(String path) {
         try (final FileInputStream inputStream = new FileInputStream(path)) {
@@ -66,9 +60,9 @@ public class STLModel {
             }
 
         }
-        this.vertices = this.floatListToArray(vertexList);
-        this.normals = this.floatListToArray(normalList);
-        this.indices = this.intListToArray(indexList);
+        this.vertices = ListUtils.floatListToArray(vertexList);
+        this.normals = ListUtils.floatListToArray(normalList);
+        this.indices = ListUtils.intListToArray(indexList);
     }
 
     private void readNextFacet(Scanner fileScanner, int triangleIndex, List<Float> vertexList, List<Float> normalList, List<Integer> indexList, Scanner lineScanner) {
@@ -107,22 +101,6 @@ public class STLModel {
         vertexList.add(vertexScanner.nextFloat());
     }
 
-
-    private int[] intListToArray(List<Integer> intList) {
-        final int[] listAsArray = new int[intList.size()];
-        for (int i = 0; i < intList.size(); i++) {
-            listAsArray[i] = intList.get(i);
-        }
-        return listAsArray;
-    }
-
-    private float[] floatListToArray(List<Float> floatList) {
-        final float[] listAsArray = new float[floatList.size()];
-        for (int i = 0; i < floatList.size(); i++) {
-            listAsArray[i] = floatList.get(i);
-        }
-        return listAsArray;
-    }
 
     private void parseBinarySTL(ByteBuffer byteBuffer) {
         byteBuffer.position(80);

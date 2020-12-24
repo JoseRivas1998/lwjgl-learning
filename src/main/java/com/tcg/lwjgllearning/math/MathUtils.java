@@ -28,6 +28,10 @@ public final class MathUtils {
         return (float) Math.sqrt(x);
     }
 
+    public static float cbrt(float x) {
+        return (float) Math.cbrt(x);
+    }
+
     public static float clamp(float x, float min, float max) {
         return Math.max(min, Math.min(x, max));
     }

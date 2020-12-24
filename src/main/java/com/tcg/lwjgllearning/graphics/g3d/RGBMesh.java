@@ -15,7 +15,7 @@ import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 
-public class RGBMesh extends Mesh{
+public class RGBMesh extends Mesh {
 
     private final float[] colorArray;
     private int colorVboId;
