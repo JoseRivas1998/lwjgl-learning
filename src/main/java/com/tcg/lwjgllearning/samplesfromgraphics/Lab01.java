@@ -129,8 +129,8 @@ public class Lab01 extends ApplicationAdapter {
     }
 
     @Override
-    public void close() {
-        this.shaderProgram.cleanUp();
+    public void dispose() {
+        this.shaderProgram.dispose();
     }
 
     public static void main(String[] args) {

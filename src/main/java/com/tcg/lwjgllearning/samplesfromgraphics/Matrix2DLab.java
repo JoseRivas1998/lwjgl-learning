@@ -1,7 +1,6 @@
 package com.tcg.lwjgllearning.samplesfromgraphics;
 
 import com.tcg.lwjgllearning.application.ApplicationAdapter;
-import com.tcg.lwjgllearning.application.ApplicationListener;
 import com.tcg.lwjgllearning.application.LWJGLApplication;
 import com.tcg.lwjgllearning.graphics.Color;
 import com.tcg.lwjgllearning.graphics.ShaderProgram;
@@ -22,19 +21,19 @@ public class Matrix2DLab extends ApplicationAdapter {
 
     @Override
     public void create() {
-        uniformColorShader = ShaderProgram.buildShader(
+        this.uniformColorShader = ShaderProgram.buildShader(
                 FileUtils.readFile("sample_shaders/matrix2DLab/uniformColor.vert.glsl"),
                 FileUtils.readFile("sample_shaders/matrix2DLab/uniformColor.frag.glsl")
         );
 
-        multiColorShader = ShaderProgram.buildShader(
+        this.multiColorShader = ShaderProgram.buildShader(
                 FileUtils.readFile("sample_shaders/matrix2DLab/multiColor.vert.glsl"),
                 FileUtils.readFile("sample_shaders/matrix2DLab/multiColor.frag.glsl")
         );
 
-        greenBox = new UniformColorDrawable(uniformColorShader,
-                boxPositionArray(),
-                boxIndexArray(),
+        this.greenBox = new UniformColorDrawable(this.uniformColorShader,
+                this.boxPositionArray(),
+                this.boxIndexArray(),
                 Color.rgb888(0x00FF00),
                 new Vector2(0.8f, 0.8f),
                 MathUtils.PI / 4f,
@@ -42,9 +41,9 @@ public class Matrix2DLab extends ApplicationAdapter {
 
         final Color red = Color.rgb888(0xFF0000);
         final Color blue = Color.rgb888(0x0000FF);
-        redBlueBox = new MultiColorDrawable(multiColorShader,
-                boxPositionArray(),
-                boxIndexArray(),
+        this.redBlueBox = new MultiColorDrawable(this.multiColorShader,
+                this.boxPositionArray(),
+                this.boxIndexArray(),
                 new Color[]{
                         red, blue,
                         red, blue
@@ -90,8 +89,11 @@ public class Matrix2DLab extends ApplicationAdapter {
     }
 
     @Override
-    public void close() {
-        this.uniformColorShader.cleanUp();
+    public void dispose() {
+        this.greenBox.dispose();
+        this.redBlueBox.dispose();
+        this.uniformColorShader.dispose();
+        this.multiColorShader.dispose();
     }
 
     public static void main(String[] args) {

@@ -20,6 +20,6 @@ public class ApplicationAdapter implements ApplicationListener {
     }
 
     @Override
-    public void close() {
+    public void dispose() {
     }
 }

@@ -1,12 +1,13 @@
 package com.tcg.lwjgllearning.application;
 
-public interface ApplicationListener {
+import com.tcg.lwjgllearning.utils.Disposable;
+
+public interface ApplicationListener extends Disposable {
 
     void create();
     void update();
     void draw();
     void resize(int width, int height);
-    void close();
 
 
 }

@@ -36,7 +36,6 @@ public class STLModelTest extends ApplicationAdapter {
 
     @Override
     public void create() {
-        super.create();
         this.ambientLight.set(0.2f, 0.3f, 0.2f);
         this.lightDirection.set(1f, -1f, -0.25f);
         this.lightIntensity.set(0.9f, 0.8f, 0.6f);
@@ -101,8 +100,12 @@ public class STLModelTest extends ApplicationAdapter {
     }
 
     @Override
-    public void close() {
-        super.close();
+    public void dispose() {
+        this.cashFloatGamePiece.dispose();
+        this.binarySpaceInvader.dispose();
+        this.asciiSpaceInvader.dispose();
+        this.uniformShader.dispose();
+        this.rgbShader.dispose();
     }
 
     private void updateMatricesAndLighting(int width, int height) {

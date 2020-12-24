@@ -4,6 +4,7 @@ import com.tcg.lwjgllearning.graphics.ShaderProgram;
 import com.tcg.lwjgllearning.math.Quaternion;
 import com.tcg.lwjgllearning.math.Transform3D;
 import com.tcg.lwjgllearning.math.Vector3;
+import com.tcg.lwjgllearning.utils.Disposable;
 import org.lwjgl.system.MemoryUtil;
 
 import java.nio.FloatBuffer;
@@ -13,10 +14,9 @@ import java.util.Objects;
 
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL30.glBindVertexArray;
-import static org.lwjgl.opengl.GL30.glGenVertexArrays;
+import static org.lwjgl.opengl.GL30.*;
 
-public class Mesh extends Transform3D {
+public class Mesh extends Transform3D implements Disposable {
 
     protected final ShaderProgram shaderProgram;
     protected final float[] positionArray;
@@ -26,6 +26,7 @@ public class Mesh extends Transform3D {
     protected int mNormalUniformLocation;
     protected int positionAttribLocation;
     protected int normalAttribLocation;
+
     protected int vaoId;
     protected int positionVboId;
     protected int normalVboId;
@@ -120,4 +121,11 @@ public class Mesh extends Transform3D {
         this.shaderProgram.unbind();
     }
 
+    @Override
+    public void dispose() {
+        glDeleteBuffers(this.positionVboId);
+        glDeleteBuffers(this.normalVboId);
+        glDeleteBuffers(this.indexVboId);
+        glDeleteVertexArrays(this.vaoId);
+    }
 }

@@ -141,6 +141,99 @@ public class Shapes3D {
                     front.copy()
             };
         }
+
+        public static Color[] defaultColorArray() {
+            final Color green = Color.rgb888(0x00FF00);
+            final Color red = Color.rgb888(0xFF0000);
+            final Color blue = Color.rgb888(0x0000FF);
+            return colors(green, green, red, red, blue, blue);
+        }
+
+        public static float[] uvRepeatArray() {
+            return new float[]{
+                    // top (+y)
+                    0f, 0f,
+                    0f, 1f,
+                    1f, 1f,
+                    1f, 0f,
+                    // bottom (-y)
+                    0f, 0f,
+                    0f, 1f,
+                    1f, 1f,
+                    1f, 0f,
+                    // // left (-x)
+                    0f, 0f,
+                    0f, 1f,
+                    1f, 1f,
+                    1f, 0f,
+                    // right (+x)
+                    0f, 0f,
+                    0f, 1f,
+                    1f, 1f,
+                    1f, 0f,
+                    // back (-z)
+                    0f, 0f,
+                    0f, 1f,
+                    1f, 1f,
+                    1f, 0f,
+                    // front (+z)
+                    0f, 0f,
+                    0f, 1f,
+                    1f, 1f,
+                    1f, 0f
+            };
+        }
+
+        public static float[] uvUnwrappedArray() {
+            final float oneQuarter = 1f / 4f;
+            final float oneThird = 1f / 3f;
+            final float onHalf = 1f / 2f;
+            final float twoThirds = 2f / 3f;
+            final float threeQuarters = 3f / 4f;
+            return new float[]{
+                    // top (+y)
+                    // -0.5, 0.5, -0.5,
+                    oneQuarter, 0f,
+                    // -0.5, 0.5, 0.5,
+                    oneQuarter, oneThird,
+                    // 0.5,  0.5, 0.5,
+                    onHalf, oneThird,
+                    // 0.5,  0.5, -0.5,
+                    onHalf, 0f,
+
+                    // bottom (-y)
+                    // -0.5, -0.5, 0.5,
+                    oneQuarter, twoThirds,
+                    // -0.5, -0.5, -0.5,
+                    oneQuarter, 1f,
+                    // 0.5,  -0.5, -0.5,
+                    onHalf, 1f,
+                    // 0.5,  -0.5, 0.5,
+                    onHalf, twoThirds,
+
+                    // // left (-x)
+                    0f, oneThird,
+                    0f, twoThirds,
+                    oneQuarter, twoThirds,
+                    oneQuarter, oneThird,
+                    // right (+x)
+                    onHalf, oneThird,
+                    onHalf, twoThirds,
+                    threeQuarters, twoThirds,
+                    threeQuarters, oneThird,
+                    // back (-z)
+                    threeQuarters, oneThird,
+                    threeQuarters, twoThirds,
+                    1f, twoThirds,
+                    1f, oneThird,
+                    // front (+z)
+                    oneQuarter, oneThird,
+                    oneQuarter, twoThirds,
+                    onHalf, twoThirds,
+                    onHalf, oneThird
+            };
+        }
+
     }
 
 }

@@ -15,6 +15,7 @@ import static org.lwjgl.opengl.GL30.glBindVertexArray;
 public class MultiColorDrawable extends Drawable{
 
     private final float[] colorArray;
+    private int colorVboId;
 
     public MultiColorDrawable(ShaderProgram shaderProgram, float[] positionArray, int[] indexArray, Color[] colors, Vector2 position, float rotation, Vector2 scale) {
         super(shaderProgram, positionArray, indexArray, position, rotation, scale);
@@ -36,8 +37,8 @@ public class MultiColorDrawable extends Drawable{
             colorBuffer = MemoryUtil.memAllocFloat(this.colorArray.length);
             colorBuffer.put(this.colorArray).flip();
 
-            final int colorVboId = glGenBuffers();
-            glBindBuffer(GL_ARRAY_BUFFER, colorVboId);
+            this.colorVboId = glGenBuffers();
+            glBindBuffer(GL_ARRAY_BUFFER, this.colorVboId);
             glBufferData(GL_ARRAY_BUFFER, colorBuffer, GL_STATIC_DRAW);
             int colorAttribLocation = this.shaderProgram.getAttribLocation("vertColor");
             glEnableVertexAttribArray(colorAttribLocation);
@@ -51,6 +52,9 @@ public class MultiColorDrawable extends Drawable{
         }
     }
 
-
-
+    @Override
+    public void dispose() {
+        glDeleteBuffers(this.colorVboId);
+        super.dispose();
+    }
 }

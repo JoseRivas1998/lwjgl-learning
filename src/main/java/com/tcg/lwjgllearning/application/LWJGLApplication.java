@@ -1,7 +1,6 @@
 package com.tcg.lwjgllearning.application;
 
 import org.lwjgl.Version;
-import org.lwjgl.opengl.GL;
 
 import java.util.UUID;
 
@@ -33,7 +32,7 @@ public class LWJGLApplication implements Runnable {
         this.applicationListener.create();
         this.loop();
 
-        this.applicationListener.close();
+        this.applicationListener.dispose();
         this.window.close();
     }
 

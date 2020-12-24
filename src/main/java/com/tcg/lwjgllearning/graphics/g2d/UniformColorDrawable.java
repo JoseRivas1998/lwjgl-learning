@@ -15,7 +15,7 @@ public class UniformColorDrawable extends Drawable{
         super(shaderProgram, positionArray, indexArray, position, rotation, scale);
 
         this.color = color.copy();
-        colorUniformLocation = this.shaderProgram.getUniformLocation("color");
+        this.colorUniformLocation = this.shaderProgram.getUniformLocation("color");
     }
 
     public UniformColorDrawable(ShaderProgram shaderProgram, float[] positionArray, int[] indexArray, Color color) {

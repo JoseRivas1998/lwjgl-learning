@@ -55,4 +55,9 @@ public class RGBMesh extends Mesh{
         }
     }
 
+    @Override
+    public void dispose() {
+        glDeleteBuffers(this.colorVboId);
+        super.dispose();
+    }
 }

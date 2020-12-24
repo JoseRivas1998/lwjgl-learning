@@ -28,7 +28,7 @@ public class Main {
             }
 
             @Override
-            public void close() {
+            public void dispose() {
                 System.out.println("Close");
             }
         });

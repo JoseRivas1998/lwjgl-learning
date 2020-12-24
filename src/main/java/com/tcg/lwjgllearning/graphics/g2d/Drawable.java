@@ -3,6 +3,7 @@ package com.tcg.lwjgllearning.graphics.g2d;
 import com.tcg.lwjgllearning.graphics.ShaderProgram;
 import com.tcg.lwjgllearning.math.Transform2D;
 import com.tcg.lwjgllearning.math.Vector2;
+import com.tcg.lwjgllearning.utils.Disposable;
 import org.lwjgl.system.MemoryUtil;
 
 import java.nio.FloatBuffer;
@@ -11,10 +12,9 @@ import java.util.Arrays;
 
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL30.glBindVertexArray;
-import static org.lwjgl.opengl.GL30.glGenVertexArrays;
+import static org.lwjgl.opengl.GL30.*;
 
-public abstract class Drawable extends Transform2D {
+public abstract class Drawable extends Transform2D implements Disposable {
 
     protected final ShaderProgram shaderProgram;
     protected final float[] positionArray;
@@ -23,6 +23,8 @@ public abstract class Drawable extends Transform2D {
     protected int vaoId;
     protected int positionAttribLocation;
     protected int mWorldUniformLocation;
+    private int positionVboId;
+    private int indexVboId;
 
     public Drawable(ShaderProgram shaderProgram, float[] positionArray, int[] indexArray, Vector2 position, float rotation, Vector2 scale) {
         super(position, rotation, scale);
@@ -49,8 +51,8 @@ public abstract class Drawable extends Transform2D {
             positionBuffer = MemoryUtil.memAllocFloat(this.positionArray.length);
             positionBuffer.put(this.positionArray).flip();
 
-            final int positionVboId = glGenBuffers();
-            glBindBuffer(GL_ARRAY_BUFFER, positionVboId);
+            this.positionVboId = glGenBuffers();
+            glBindBuffer(GL_ARRAY_BUFFER, this.positionVboId);
             glBufferData(GL_ARRAY_BUFFER, positionBuffer, GL_STATIC_DRAW);
             this.positionAttribLocation = this.shaderProgram.getAttribLocation("vertPosition");
             glEnableVertexAttribArray(this.positionAttribLocation);
@@ -59,7 +61,7 @@ public abstract class Drawable extends Transform2D {
             indexBuffer = MemoryUtil.memAllocInt(this.indexArray.length);
             indexBuffer.put(this.indexArray).flip();
 
-            final int indexVboId = glGenBuffers();
+            this.indexVboId = glGenBuffers();
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexVboId);
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexBuffer, GL_STATIC_DRAW);
 
@@ -99,5 +101,10 @@ public abstract class Drawable extends Transform2D {
         this.shaderProgram.unbind();
     }
 
-
+    @Override
+    public void dispose() {
+        glDeleteBuffers(this.positionVboId);
+        glDeleteBuffers(this.indexVboId);
+        glDeleteVertexArrays(this.vaoId);
+    }
 }

@@ -1,9 +1,11 @@
 package com.tcg.lwjgllearning.graphics;
 
+import com.tcg.lwjgllearning.utils.Disposable;
+
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
-public class ShaderProgram {
+public class ShaderProgram implements Disposable {
 
     private final int programId;
 
@@ -17,7 +19,7 @@ public class ShaderProgram {
      */
 
     public ShaderProgram() {
-        programId = createProgram();
+        this.programId = this.createProgram();
     }
 
     /*
@@ -35,18 +37,19 @@ public class ShaderProgram {
      */
 
     public void bind() {
-        verifyCompiled();
+        this.verifyCompiled();
         glUseProgram(this.programId);
     }
 
-    public void cleanUp() {
-        unbind();
-        deleteProgram();
+    @Override
+    public void dispose() {
+        this.unbind();
+        this.deleteProgram();
     }
 
     public void compile(String vertexShader, String fragmentShader) {
-        this.vertexShaderId = createShaderOfType(vertexShader, GL_VERTEX_SHADER);
-        this.fragmentShaderId = createShaderOfType(fragmentShader, GL_FRAGMENT_SHADER);
+        this.vertexShaderId = this.createShaderOfType(vertexShader, GL_VERTEX_SHADER);
+        this.fragmentShaderId = this.createShaderOfType(fragmentShader, GL_FRAGMENT_SHADER);
         this.compiled = true;
     }
 
@@ -59,14 +62,14 @@ public class ShaderProgram {
     }
 
     public void link() {
-        verifyCompiled();
+        this.verifyCompiled();
         glLinkProgram(this.programId);
-        verifyProgramIsLinked();
+        this.verifyProgramIsLinked();
 
         glDetachShader(this.programId, this.vertexShaderId);
         glDetachShader(this.programId, this.fragmentShaderId);
 
-        validateProgram();
+        this.validateProgram();
 
     }
 
@@ -82,7 +85,7 @@ public class ShaderProgram {
     private void compileShader(String shaderCode, int shaderId) {
         glShaderSource(shaderId, shaderCode);
         glCompileShader(shaderId);
-        verifyShaderIsCompiled(shaderId);
+        this.verifyShaderIsCompiled(shaderId);
     }
 
     private int createProgram() {
@@ -104,15 +107,15 @@ public class ShaderProgram {
     }
 
     private int createShaderOfType(String shaderCode, int shaderType) {
-        verifyNotCompiled();
-        final int shaderId = createShader(shaderType);
-        compileShader(shaderCode, shaderId);
-        glAttachShader(programId, shaderId);
+        this.verifyNotCompiled();
+        final int shaderId = this.createShader(shaderType);
+        this.compileShader(shaderCode, shaderId);
+        glAttachShader(this.programId, shaderId);
         return shaderId;
     }
 
     private void deleteProgram() {
-        if (programId != NULL) {
+        if (this.programId != NULL) {
             glDeleteProgram(this.programId);
         }
     }
@@ -126,18 +129,18 @@ public class ShaderProgram {
     }
 
     private void verifyProgramIsLinked() {
-        if (glGetProgrami(programId, GL_LINK_STATUS) == 0) {
+        if (glGetProgrami(this.programId, GL_LINK_STATUS) == 0) {
             final String programInfoLog = glGetProgramInfoLog(this.programId);
             throw new RuntimeException(String.format("Error linking code: %s", programInfoLog));
         }
     }
 
     private void verifyCompiled() {
-        if (!compiled) throw new IllegalStateException("Shader must be compiled.");
+        if (!this.compiled) throw new IllegalStateException("Shader must be compiled.");
     }
 
     private void verifyNotCompiled() {
-        if (compiled) throw new IllegalStateException("Shader cannot be compiled twice");
+        if (this.compiled) throw new IllegalStateException("Shader cannot be compiled twice");
     }
 
     private void verifyShaderIsCompiled(int shaderId) {

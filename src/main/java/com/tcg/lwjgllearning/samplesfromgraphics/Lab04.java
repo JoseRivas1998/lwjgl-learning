@@ -108,8 +108,11 @@ public class Lab04 extends ApplicationAdapter {
     }
 
     @Override
-    public void close() {
-        super.close();
+    public void dispose() {
+        this.rgbCube.dispose();
+        this.meshCube.dispose();
+        this.uniformShader.dispose();
+        this.rgbShader.dispose();
     }
 
     private void updateMatricesAndLighting(int width, int height) {
