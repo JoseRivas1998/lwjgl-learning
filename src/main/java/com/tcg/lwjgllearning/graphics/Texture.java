@@ -19,6 +19,10 @@ public class Texture implements Disposable {
     private final int textureId;
 
     public Texture(String filePath) {
+        this(filePath, false);
+    }
+
+    public Texture(String filePath, boolean flipped) {
         ByteBuffer buf = null;
         try {
             final PNGDecoder decoder = new PNGDecoder(FileUtils.getResourceAsStream(filePath));
@@ -26,7 +30,11 @@ public class Texture implements Disposable {
             this.height = decoder.getHeight();
 
             buf = MemoryUtil.memAlloc(4 * this.width * this.height);
-            decoder.decode(buf, this.width * 4, PNGDecoder.Format.RGBA);
+            if (flipped) {
+                decoder.decodeFlipped(buf, this.width * 4, PNGDecoder.Format.RGBA);
+            } else {
+                decoder.decode(buf, this.width * 4, PNGDecoder.Format.RGBA);
+            }
             buf.flip();
 
             this.textureId = glGenTextures();

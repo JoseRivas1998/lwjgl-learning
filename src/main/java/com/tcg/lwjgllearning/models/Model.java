@@ -6,5 +6,6 @@ public class Model {
     private static final int FLOATS_PER_VERTEX = 3;
     protected float[] vertices;
     protected float[] normals;
+    protected float[] textureCoordinates;
     protected int[] indices;
 }

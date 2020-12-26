@@ -59,19 +59,17 @@ public class STLModelTest extends ApplicationAdapter {
         this.binarySpaceInvader = STLModel.buildStlMesh("models/space_invader_magnet_binary.stl",
                 this.uniformShader, red);
         this.binarySpaceInvader.setScale(new Vector3(0.05f, 0.05f, 0.05f));
-        this.binarySpaceInvader.localRotate(Quaternion.ofRotation(MathUtils.PI, Vector3.x(), true));
         this.binarySpaceInvader.translate(new Vector3(-5, 0, 0));
 
         this.asciiSpaceInvader = STLModel.buildStlMesh("models/space_invader_magnet_ascii.stl",
                 this.uniformShader, green);
         this.asciiSpaceInvader.setScale(new Vector3(0.05f, 0.05f, 0.05f));
-        this.asciiSpaceInvader.localRotate(Quaternion.ofRotation(MathUtils.PI, Vector3.x(), true));
         this.asciiSpaceInvader.translate(new Vector3(5, 0, 0));
 
         this.cashFloatGamePiece = STLModel.buildStlMesh("models/CashFlowGamePiece.stl",
                 this.uniformShader, blue);
         this.cashFloatGamePiece.setScale(new Vector3(0.1f, 0.1f, 0.1f));
-        this.cashFloatGamePiece.localRotate(Quaternion.ofRotation(MathUtils.PI / 2, Vector3.x(), true));
+        this.cashFloatGamePiece.localRotate(Quaternion.ofRotation(-MathUtils.PI / 2, Vector3.x(), true));
         this.cashFloatGamePiece.translate(new Vector3(-1, -1, -1));
 
 

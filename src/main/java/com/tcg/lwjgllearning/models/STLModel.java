@@ -19,6 +19,8 @@ import java.util.Scanner;
 public class STLModel extends Model {
 
     public STLModel(String path) {
+        // STL models do not support uv textures.
+        this.textureCoordinates = new float[0];
         try (final FileInputStream inputStream = new FileInputStream(path)) {
             final byte[] fileBytes = inputStream.readAllBytes();
             final ByteBuffer byteBuffer = ByteBuffer.wrap(fileBytes);
