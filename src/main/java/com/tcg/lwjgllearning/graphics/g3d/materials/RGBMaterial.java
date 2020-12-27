@@ -1,5 +1,6 @@
 package com.tcg.lwjgllearning.graphics.g3d.materials;
 
+import com.tcg.lwjgllearning.graphics.Color;
 import com.tcg.lwjgllearning.graphics.ShaderProgram;
 import com.tcg.lwjgllearning.math.Vector3;
 
@@ -19,7 +20,7 @@ public class RGBMaterial extends Material{
     private final int shininessUniformLocation;
 
     public RGBMaterial(ShaderProgram shaderProgram,
-                       Vector3 diffuse, Vector3 specular, Vector3 ambient, float shininess) {
+                       Color diffuse, Color specular, Color ambient, float shininess) {
         super(shaderProgram);
         this.setDiffuse(diffuse);
         this.setSpecular(specular);
@@ -32,31 +33,30 @@ public class RGBMaterial extends Material{
     }
 
     public RGBMaterial(ShaderProgram shaderProgram) {
-        this(shaderProgram, new Vector3(1, 1, 1), new Vector3(1, 1, 1),
-                new Vector3(1, 1, 1), 0.3f);
+        this(shaderProgram, Color.rgb888(0xFFFFFF), Color.rgb888(0xFFFFFF), Color.rgb888(0xFFFFFF), 0.3f);
     }
 
-    public Vector3 getDiffuse() {
-        return new Vector3(this.diffuse[0], this.diffuse[1], this.diffuse[2]);
+    public Color getDiffuse() {
+        return new Color(this.diffuse[0], this.diffuse[1], this.diffuse[2], 1f);
     }
 
-    public void setDiffuse(Vector3 diffuse) {
+    public void setDiffuse(Color diffuse) {
         System.arraycopy(diffuse.asArray(), 0, this.diffuse, 0, this.diffuse.length);
     }
 
-    public Vector3 getSpecular() {
-        return new Vector3(this.specular[0], this.specular[1], this.specular[2]);
+    public Color getSpecular() {
+        return new Color(this.specular[0], this.specular[1], this.specular[2], 1f);
     }
 
-    public void setSpecular(Vector3 specular) {
+    public void setSpecular(Color specular) {
         System.arraycopy(specular.asArray(), 0, this.specular, 0, this.specular.length);
     }
 
-    public Vector3 getAmbient() {
-        return new Vector3(this.ambient[0], this.ambient[1], this.ambient[2]);
+    public Color getAmbient() {
+        return new Color(this.ambient[0], this.ambient[1], this.ambient[2], 1f);
     }
 
-    public void setAmbient(Vector3 ambient) {
+    public void setAmbient(Color ambient) {
         System.arraycopy(ambient.asArray(), 0, this.ambient, 0, this.ambient.length);
     }
 
