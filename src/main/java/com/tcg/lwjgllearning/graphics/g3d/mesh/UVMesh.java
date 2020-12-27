@@ -2,6 +2,7 @@ package com.tcg.lwjgllearning.graphics.g3d.mesh;
 
 import com.tcg.lwjgllearning.graphics.ShaderProgram;
 import com.tcg.lwjgllearning.graphics.Texture;
+import com.tcg.lwjgllearning.graphics.g3d.materials.UVMaterial;
 import com.tcg.lwjgllearning.math.Quaternion;
 import com.tcg.lwjgllearning.math.Vector3;
 import org.lwjgl.system.MemoryUtil;
@@ -22,19 +23,32 @@ public class UVMesh extends Mesh {
     private final int texCoordAttribLocation;
     private final int texCoordVboId;
 
-    public UVMesh(ShaderProgram shaderProgram, float[] positionArray, float[] normalArray, int[] indexArray, float[] uvArray, Texture texture, Vector3 position, Quaternion rotation, Vector3 scale) {
-        super(shaderProgram, positionArray, normalArray, indexArray, position, rotation, scale);
+    public UVMesh(UVMaterial material, float[] positionArray, float[] normalArray, int[] indexArray, float[] uvArray,
+                  Texture texture, Vector3 position, Quaternion rotation, Vector3 scale) {
+        super(material, positionArray, normalArray, indexArray, position, rotation, scale);
         this.uvArray = Arrays.copyOf(Objects.requireNonNull(uvArray), uvArray.length);
         this.texture = Objects.requireNonNull(texture);
-        this.textureUniformLocation = this.shaderProgram.getUniformLocation("texture");
-        this.texCoordAttribLocation = this.shaderProgram.getAttribLocation("vertTexCoord");
+        this.textureUniformLocation = this.material.shaderProgram.getUniformLocation("texture");
+        this.texCoordAttribLocation = this.material.shaderProgram.getAttribLocation("vertTexCoord");
 
         this.texCoordVboId = this.createBuffer();
     }
 
-    public UVMesh(ShaderProgram shaderProgram, float[] positionArray, float[] normalArray, int[] indexArray, float[] uvArray, Texture texture) {
-        this(shaderProgram, positionArray, normalArray, indexArray, uvArray, texture,
+    public UVMesh(ShaderProgram shaderProgram, float[] positionArray, float[] normalArray, int[] indexArray,
+                  float[] uvArray, Texture texture, Vector3 position, Quaternion rotation, Vector3 scale) {
+        this(new UVMaterial(shaderProgram), positionArray, normalArray,
+                indexArray, uvArray, texture, position, rotation, scale);
+    }
+
+    public UVMesh(UVMaterial material, float[] positionArray, float[] normalArray, int[] indexArray,
+                  float[] uvArray, Texture texture) {
+        this(material, positionArray, normalArray, indexArray, uvArray, texture,
                 Vector3.origin(), new Quaternion(), new Vector3(1, 1, 1));
+    }
+
+    public UVMesh(ShaderProgram shaderProgram, float[] positionArray, float[] normalArray, int[] indexArray,
+                  float[] uvArray, Texture texture) {
+        this(new UVMaterial(shaderProgram), positionArray, normalArray, indexArray, uvArray, texture);
     }
 
     private int createBuffer() {

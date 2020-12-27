@@ -2,6 +2,7 @@ package com.tcg.lwjgllearning.graphics.g3d.mesh;
 
 import com.tcg.lwjgllearning.graphics.Color;
 import com.tcg.lwjgllearning.graphics.ShaderProgram;
+import com.tcg.lwjgllearning.graphics.g3d.materials.RGBMaterial;
 import com.tcg.lwjgllearning.math.Quaternion;
 import com.tcg.lwjgllearning.math.Vector3;
 import org.lwjgl.system.MemoryUtil;
@@ -20,15 +21,26 @@ public class RGBMesh extends Mesh {
     private final float[] colorArray;
     private int colorVboId;
 
-    public RGBMesh(ShaderProgram shaderProgram, float[] positionArray, float[] normalArray, int[] indexArray, Color[] colors, Vector3 position, Quaternion rotation, Vector3 scale) {
-        super(shaderProgram, positionArray, normalArray, indexArray, position, rotation, scale);
+    public RGBMesh(RGBMaterial material, float[] positionArray, float[] normalArray, int[] indexArray, Color[] colors,
+                   Vector3 position, Quaternion rotation, Vector3 scale) {
+        super(material, positionArray, normalArray, indexArray, position, rotation, scale);
         this.colorArray = Color.colorArrayToFloatArray(colors);
         this.createColorBuffer();
     }
 
-    public RGBMesh(ShaderProgram shaderProgram, float[] positionArray, float[] normalArray, int[] indexArray, Color[] colors) {
-        this(shaderProgram, positionArray, normalArray, indexArray, colors,
+    public RGBMesh(ShaderProgram shaderProgram, float[] positionArray, float[] normalArray, int[] indexArray,
+                   Color[] colors, Vector3 position, Quaternion rotation, Vector3 scale) {
+        this(new RGBMaterial(shaderProgram), positionArray, normalArray, indexArray, colors, position, rotation, scale);
+    }
+
+    public RGBMesh(RGBMaterial material, float[] positionArray, float[] normalArray, int[] indexArray, Color[] colors) {
+        this(material, positionArray, normalArray, indexArray, colors,
                 Vector3.origin(), new Quaternion(), new Vector3(1, 1, 1));
+    }
+
+    public RGBMesh(ShaderProgram shaderProgram, float[] positionArray, float[] normalArray, int[] indexArray,
+                   Color[] colors) {
+        this(new RGBMaterial(shaderProgram), positionArray, normalArray, indexArray, colors);
     }
 
     private void createColorBuffer() {
@@ -43,7 +55,7 @@ public class RGBMesh extends Mesh {
             this.colorVboId = glGenBuffers();
             glBindBuffer(GL_ARRAY_BUFFER, this.colorVboId);
             glBufferData(GL_ARRAY_BUFFER, colorBuffer, GL_STATIC_DRAW);
-            int colorAttribLocation = this.shaderProgram.getAttribLocation("vertColor");
+            int colorAttribLocation = this.material.shaderProgram.getAttribLocation("vertColor");
             glEnableVertexAttribArray(colorAttribLocation);
             glVertexAttribPointer(colorAttribLocation, 4, GL_FLOAT, false, 0, 0);
 
