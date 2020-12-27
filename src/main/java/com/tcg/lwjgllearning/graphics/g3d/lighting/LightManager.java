@@ -20,7 +20,7 @@ public class LightManager {
     private final float[] ambientLight = new float[3];
 
     private final int maxPerLight;
-    private final List<PhongLight> lights = new ArrayList<>();
+    private final List<PhongLight<?>> lights = new ArrayList<>();
 
     private int pointLightIndex;
     private int directionalLightIndex;
