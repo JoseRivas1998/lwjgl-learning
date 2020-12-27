@@ -1,4 +1,4 @@
-package com.tcg.lwjgllearning.graphics.g3d;
+package com.tcg.lwjgllearning.graphics.g3d.mesh;
 
 import com.tcg.lwjgllearning.graphics.Color;
 import com.tcg.lwjgllearning.graphics.ShaderProgram;

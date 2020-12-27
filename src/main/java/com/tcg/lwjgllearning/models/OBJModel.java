@@ -3,15 +3,14 @@ package com.tcg.lwjgllearning.models;
 import com.tcg.lwjgllearning.graphics.Color;
 import com.tcg.lwjgllearning.graphics.ShaderProgram;
 import com.tcg.lwjgllearning.graphics.Texture;
-import com.tcg.lwjgllearning.graphics.g3d.UVMesh;
-import com.tcg.lwjgllearning.graphics.g3d.UniformColorMesh;
+import com.tcg.lwjgllearning.graphics.g3d.mesh.UVMesh;
+import com.tcg.lwjgllearning.graphics.g3d.mesh.UniformColorMesh;
 import com.tcg.lwjgllearning.math.Vector2;
 import com.tcg.lwjgllearning.math.Vector3;
 import com.tcg.lwjgllearning.utils.FileUtils;
 import com.tcg.lwjgllearning.utils.ListUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 

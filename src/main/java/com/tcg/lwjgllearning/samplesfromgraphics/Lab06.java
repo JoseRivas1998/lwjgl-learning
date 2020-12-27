@@ -4,7 +4,7 @@ import com.tcg.lwjgllearning.application.ApplicationAdapter;
 import com.tcg.lwjgllearning.application.LWJGLApplication;
 import com.tcg.lwjgllearning.graphics.ShaderProgram;
 import com.tcg.lwjgllearning.graphics.Texture;
-import com.tcg.lwjgllearning.graphics.g3d.UVMesh;
+import com.tcg.lwjgllearning.graphics.g3d.mesh.UVMesh;
 import com.tcg.lwjgllearning.math.MathUtils;
 import com.tcg.lwjgllearning.math.Matrix4;
 import com.tcg.lwjgllearning.math.Quaternion;

@@ -2,8 +2,7 @@ package com.tcg.lwjgllearning.models;
 
 import com.tcg.lwjgllearning.graphics.Color;
 import com.tcg.lwjgllearning.graphics.ShaderProgram;
-import com.tcg.lwjgllearning.graphics.g3d.RGBMesh;
-import com.tcg.lwjgllearning.graphics.g3d.UniformColorMesh;
+import com.tcg.lwjgllearning.graphics.g3d.mesh.UniformColorMesh;
 import com.tcg.lwjgllearning.utils.ListUtils;
 
 import java.io.ByteArrayInputStream;
