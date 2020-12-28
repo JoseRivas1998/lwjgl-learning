@@ -297,6 +297,23 @@ public class Shapes3D {
             return ListUtils.intListToArray(ind);
         }
 
+        public static float[] uvArray(int latBands, int longBands) {
+            final List<Float> uvArray = new ArrayList<>();
+            float u;
+            float v;
+            for (int lat = 0; lat <= latBands; lat++)
+            {
+                v = (float) lat / latBands;
+                for (int lon = 0; lon <= longBands; lon++)
+                {
+                    u = (float) lon / longBands;
+                    uvArray.add(u);
+                    uvArray.add(v);
+                }
+            }
+            return ListUtils.floatListToArray(uvArray);
+        }
+
     }
 
 }

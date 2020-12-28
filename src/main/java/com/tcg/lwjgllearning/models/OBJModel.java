@@ -3,6 +3,8 @@ package com.tcg.lwjgllearning.models;
 import com.tcg.lwjgllearning.graphics.Color;
 import com.tcg.lwjgllearning.graphics.ShaderProgram;
 import com.tcg.lwjgllearning.graphics.Texture;
+import com.tcg.lwjgllearning.graphics.g3d.materials.Material;
+import com.tcg.lwjgllearning.graphics.g3d.mesh.Mesh;
 import com.tcg.lwjgllearning.graphics.g3d.mesh.UVMesh;
 import com.tcg.lwjgllearning.graphics.g3d.mesh.UniformColorMesh;
 import com.tcg.lwjgllearning.math.Vector2;
@@ -66,14 +68,28 @@ public class OBJModel extends Model {
     }
 
     public static UniformColorMesh uniformOBJ(String filepath, ShaderProgram program, Color color) {
-        final OBJModel objModel = new OBJModel(filepath);
+        return uniformOBJ(new OBJModel(filepath), program, color);
+    }
+
+    public static UniformColorMesh uniformOBJ(OBJModel objModel, ShaderProgram program, Color color) {
         return new UniformColorMesh(program, objModel.vertices, objModel.normals, objModel.indices, color);
     }
 
     public static UVMesh uvOBJ(String filepath, ShaderProgram program, Texture texture) {
-        final OBJModel objModel = new OBJModel(filepath);
+        return uvOBJ(new OBJModel(filepath), program, texture);
+    }
+
+    public static UVMesh uvOBJ(OBJModel objModel, ShaderProgram program, Texture texture) {
         return new UVMesh(program, objModel.vertices, objModel.normals, objModel.indices,
                 objModel.textureCoordinates, texture);
+    }
+
+    public static Mesh meshOBJ(String filepath, Material material) {
+        return meshOBJ(new OBJModel(filepath), material);
+    }
+
+    public static Mesh meshOBJ(OBJModel objModel, Material material) {
+        return new Mesh(material, objModel.vertices, objModel.normals, objModel.indices);
     }
 
     private int parseFace(List<Vector3> objVertices, List<Vector2> objTextureCoordinates, List<Vector3> objNormals,
