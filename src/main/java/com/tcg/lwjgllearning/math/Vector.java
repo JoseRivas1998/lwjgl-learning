@@ -36,6 +36,8 @@ public interface Vector<T extends Vector<T>> {
 
     T normalizeOutPlace();
 
+    boolean isZero();
+
     default T rotateInPlace(Quaternion q) {
         throw new UnsupportedOperationException("This vector does not support quaternion rotation.");
     }

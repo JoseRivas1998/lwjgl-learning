@@ -14,6 +14,10 @@ public class Matrix4 {
         System.arraycopy(values, 0, this.mat, 0, MATRIX_LENGTH);
     }
 
+    public static Matrix4 copyOf(Matrix4 matrix) {
+        return new Matrix4(matrix.mat);
+    }
+
     public static Matrix4 identity() {
         return new Matrix4(new float[]{
                 1, 0, 0, 0,

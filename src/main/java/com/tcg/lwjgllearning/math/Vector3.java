@@ -9,7 +9,7 @@ public class Vector3 implements Vector<Vector3> {
     public float z;
 
     public Vector3(float x, float y, float z) {
-        set(x, y, z);
+        this.set(x, y, z);
     }
 
     public Vector3() {
@@ -141,6 +141,11 @@ public class Vector3 implements Vector<Vector3> {
     public Vector3 normalizeOutPlace() {
         final float magnitude = this.magnitude();
         return new Vector3(this.x / magnitude, this.y / magnitude, this.z / magnitude);
+    }
+
+    @Override
+    public boolean isZero() {
+        return Float.compare(this.x, 0f) == 0 && Float.compare(this.y, 0f) == 0 && Float.compare(this.z, 0f) == 0;
     }
 
     @Override

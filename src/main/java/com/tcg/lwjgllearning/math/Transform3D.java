@@ -4,9 +4,9 @@ import java.util.Objects;
 
 public class Transform3D {
 
-    private final Vector3 position;
-    private final Quaternion rotation;
-    private final Vector3 scale;
+    protected final Vector3 position;
+    protected final Quaternion rotation;
+    protected final Vector3 scale;
 
     private Matrix4 mTranslate;
     private Matrix4 mRotate;
@@ -14,10 +14,10 @@ public class Transform3D {
     protected Matrix4 mWorld;
     protected Matrix3 mNormal;
 
-    private boolean hasMoved;
-    private boolean hasRotated;
-    private boolean hasScaled;
-    private boolean needsUpdate;
+    protected boolean hasMoved;
+    protected boolean hasRotated;
+    protected boolean hasScaled;
+    protected boolean needsUpdate;
 
     public Transform3D(Vector3 position, Quaternion rotation, Vector3 scale) {
         this.position = Objects.requireNonNull(position).copy();

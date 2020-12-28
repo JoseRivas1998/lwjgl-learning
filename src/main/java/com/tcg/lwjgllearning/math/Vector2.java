@@ -137,6 +137,11 @@ public class Vector2 implements Vector<Vector2> {
     }
 
     @Override
+    public boolean isZero() {
+        return Float.compare(this.x, 0f) == 0 && Float.compare(this.y, 0f) == 0;
+    }
+
+    @Override
     public Vector2 rotateInPlace(float delta) {
         final float x = this.x * MathUtils.cos(delta) - this.y * MathUtils.sin(delta);
         final float y = this.x * MathUtils.sin(delta) + this.y * MathUtils.cos(delta);
