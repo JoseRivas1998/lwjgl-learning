@@ -1,5 +1,6 @@
 package com.tcg.lwjgllearning.application;
 
+import com.tcg.lwjgllearning.application.input.Input;
 import org.lwjgl.Version;
 
 import java.util.UUID;
@@ -26,6 +27,10 @@ public class LWJGLApplication implements Runnable {
         System.out.println("Hello LWJGL" + Version.getVersion() + "!");
 
         this.window = new Window(300, 300, "Hello World", true);
+
+        final ApplicationContext context = ApplicationContext.context();
+        context.application = this;
+        context.window = this.window;
 
         this.window.init();
 

@@ -82,6 +82,13 @@ public class Window {
             if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE) {
                 glfwSetWindowShouldClose(this.windowHandle, true);
             }
+            final ApplicationContext context = ApplicationContext.context();
+            if (action == GLFW_PRESS) {
+                context.input.keyDown(key);
+            }
+            if (action == GLFW_RELEASE) {
+                context.input.keyUp(key);
+            }
         });
 
         glfwSetFramebufferSizeCallback(this.windowHandle, (window, width, height) -> {

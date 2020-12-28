@@ -12,6 +12,10 @@ public final class MathUtils {
         return (float) Math.sin(radians);
     }
 
+    public static float asin(float radians) {
+        return (float) Math.asin(radians);
+    }
+
     public static float cos(float radians) {
         return (float) Math.cos(radians);
     }
