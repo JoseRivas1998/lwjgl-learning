@@ -23,6 +23,11 @@ public abstract class AbstractMesh extends Transform3D implements Disposable, Dr
         super(position, rotation, scale);
     }
 
+    protected void activateAttribute2f(AbstractAttribute attribute, int attributeLocation) {
+        glBindBuffer(GL_ARRAY_BUFFER, this.attributeBufferMap.get(attribute));
+        glVertexAttribPointer(attributeLocation, 2, GL_FLOAT, false, 0, 0);
+    }
+
     protected void activateAttribute3f(AbstractAttribute attribute, int attributeLocation) {
         glBindBuffer(GL_ARRAY_BUFFER, this.attributeBufferMap.get(attribute));
         glVertexAttribPointer(attributeLocation, 3, GL_FLOAT, false, 0, 0);

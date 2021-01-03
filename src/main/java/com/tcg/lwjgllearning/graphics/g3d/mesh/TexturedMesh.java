@@ -74,6 +74,10 @@ public class TexturedMesh extends MaterialMesh {
         return texCoordVboId;
     }
 
+    public void activateAttribute(Attribute attribute, int attributeLocation) {
+        this.activateAttribute2f(attribute, attributeLocation);
+    }
+
     @Override
     public void activate() {
         super.activate();
