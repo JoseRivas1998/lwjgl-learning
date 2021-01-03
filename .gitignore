@@ -140,3 +140,6 @@ gradle-app.setting
 # gradle/wrapper/gradle-wrapper.properties
 
 .idea/
+.classpath
+.project
+.settings

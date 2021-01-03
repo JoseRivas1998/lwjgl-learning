@@ -4,8 +4,8 @@ import com.tcg.lwjgllearning.application.ApplicationAdapter;
 import com.tcg.lwjgllearning.application.LWJGLApplication;
 import com.tcg.lwjgllearning.graphics.Color;
 import com.tcg.lwjgllearning.graphics.ShaderProgram;
-import com.tcg.lwjgllearning.graphics.g2d.MultiColorDrawable;
-import com.tcg.lwjgllearning.graphics.g2d.UniformColorDrawable;
+import com.tcg.lwjgllearning.graphics.g2d.MultiColorMesh2D;
+import com.tcg.lwjgllearning.graphics.g2d.UniformColorMesh2D;
 import com.tcg.lwjgllearning.math.MathUtils;
 import com.tcg.lwjgllearning.math.Vector2;
 import com.tcg.lwjgllearning.utils.FileUtils;
@@ -16,8 +16,8 @@ public class Matrix2DLab extends ApplicationAdapter {
 
     private ShaderProgram uniformColorShader;
     private ShaderProgram multiColorShader;
-    private UniformColorDrawable greenBox;
-    private MultiColorDrawable redBlueBox;
+    private UniformColorMesh2D greenBox;
+    private MultiColorMesh2D redBlueBox;
 
     @Override
     public void create() {
@@ -31,7 +31,7 @@ public class Matrix2DLab extends ApplicationAdapter {
                 FileUtils.readFile("sample_shaders/matrix2DLab/multiColor.frag.glsl")
         );
 
-        this.greenBox = new UniformColorDrawable(this.uniformColorShader,
+        this.greenBox = new UniformColorMesh2D(this.uniformColorShader,
                 this.boxPositionArray(),
                 this.boxIndexArray(),
                 Color.rgb888(0x00FF00),
@@ -41,7 +41,7 @@ public class Matrix2DLab extends ApplicationAdapter {
 
         final Color red = Color.rgb888(0xFF0000);
         final Color blue = Color.rgb888(0x0000FF);
-        this.redBlueBox = new MultiColorDrawable(this.multiColorShader,
+        this.redBlueBox = new MultiColorMesh2D(this.multiColorShader,
                 this.boxPositionArray(),
                 this.boxIndexArray(),
                 new Color[]{

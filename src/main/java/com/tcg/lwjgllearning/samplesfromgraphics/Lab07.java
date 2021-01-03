@@ -8,11 +8,11 @@ import com.tcg.lwjgllearning.graphics.Texture;
 import com.tcg.lwjgllearning.graphics.g3d.lighting.DirectionalLight;
 import com.tcg.lwjgllearning.graphics.g3d.lighting.LightManager;
 import com.tcg.lwjgllearning.graphics.g3d.lighting.PointLight;
-import com.tcg.lwjgllearning.graphics.g3d.materials.RGBMaterial;
-import com.tcg.lwjgllearning.graphics.g3d.materials.UVMaterial;
-import com.tcg.lwjgllearning.graphics.g3d.mesh.Mesh;
+import com.tcg.lwjgllearning.graphics.g3d.materials.ColorPhongMaterial;
+import com.tcg.lwjgllearning.graphics.g3d.materials.ScalarPhongMaterial;
+import com.tcg.lwjgllearning.graphics.g3d.mesh.MaterialMesh;
 import com.tcg.lwjgllearning.graphics.g3d.mesh.Shapes3D;
-import com.tcg.lwjgllearning.graphics.g3d.mesh.UVMesh;
+import com.tcg.lwjgllearning.graphics.g3d.mesh.TexturedMesh;
 import com.tcg.lwjgllearning.math.MathUtils;
 import com.tcg.lwjgllearning.math.Matrix4;
 import com.tcg.lwjgllearning.math.Quaternion;
@@ -27,23 +27,28 @@ import java.util.Map;
 
 import static org.lwjgl.opengl.GL11.glViewport;
 import static org.lwjgl.opengl.GL20.glUniformMatrix4fv;
+import static org.lwjgl.opengl.GL20.glUniform3fv;
 
 public class Lab07 extends ApplicationAdapter {
 
     private final Map<String, ShaderProgram> shaderPrograms = new HashMap<>();
     private Matrix4 viewMatrix;
     private Matrix4 projMatrix;
+    private Matrix4 projViewMatrix;
     private LightManager lightManager;
     private PointLight pointLight1;
     private PointLight pointLight2;
     private DirectionalLight directionalLight;
-    private Mesh emeraldSuzy;
+    private MaterialMesh emeraldSuzy;
     private Texture earthTexture;
-    private UVMesh uvEarth;
-    private Mesh lightSuzy1;
-    private Mesh lightSuzy2;
+    private TexturedMesh uvEarth;
+    private MaterialMesh lightSuzy1;
+    private MaterialMesh lightSuzy2;
     private Instant startTime;
     private final Vector3 lightPosition = new Vector3();
+    final Vector3 cameraPosition = new Vector3(0, 3, 7);
+    final Vector3 lookAtPosition = Vector3.origin();
+    final Vector3 cameraUpDirection = Vector3.y();
 
 
     @Override
@@ -67,8 +72,8 @@ public class Lab07 extends ApplicationAdapter {
         this.pointLight1 = this.lightManager.addPointLight(pointLightPosition, pointLightDiffuse, pointLightSpecular);
         this.pointLight2 = this.lightManager.addPointLight(pointLightPosition, pointLightDiffuse, pointLightSpecular);
 
-        final Vector3 dirLightDirection = new Vector3(2f, -2f, 1f);
-        final Vector3 dirLightDiffuse = new Vector3(4f, 0f, 0f);
+        final Vector3 dirLightDirection = new Vector3(2f, -2f, -1f);
+        final Vector3 dirLightDiffuse = new Vector3(2f, 0f, 0f);
         final Vector3 dirLightSpecular = new Vector3(0f, 0f, 4f);
         this.directionalLight = this.lightManager.addDirectionalLight(
                 dirLightDirection, dirLightDiffuse, dirLightSpecular);
@@ -78,9 +83,9 @@ public class Lab07 extends ApplicationAdapter {
         final Color emeraldDiffuse = Color.rgb888(0x139C13);
         final Color emeraldSpecular = Color.rgb888(0xA1B9A1);
         final Color emeraldAmbient = Color.rgb888(0x052C05);
-        final float emeraldShininess = 0.2f;
+        final float emeraldShininess = 2f;
 
-        final RGBMaterial emeraldMaterial = new RGBMaterial(
+        final ColorPhongMaterial emeraldMaterial = new ColorPhongMaterial(
                 this.shaderPrograms.get("rgbProgram"),
                 emeraldDiffuse,
                 emeraldSpecular,
@@ -94,10 +99,10 @@ public class Lab07 extends ApplicationAdapter {
         final float earthDiffuse = 0.7f;
         final float earthSpecular = 0.3f;
         final float earthAmbient = 0.0f;
-        final float earthShininess = 0.1f;
+        final float earthShininess = 10f;
         this.earthTexture = new Texture("textures/lab07/earth-texture.png");
 
-        final UVMaterial earthMaterial = new UVMaterial(
+        final ScalarPhongMaterial earthMaterial = new ScalarPhongMaterial(
                 this.shaderPrograms.get("uvProgram"),
                 earthDiffuse,
                 earthSpecular,
@@ -106,7 +111,7 @@ public class Lab07 extends ApplicationAdapter {
         );
 
         final int latLongBands = 30;
-        this.uvEarth = new UVMesh(
+        this.uvEarth = new TexturedMesh(
                 earthMaterial,
                 Shapes3D.Sphere.positionArray(latLongBands, latLongBands),
                 Shapes3D.Sphere.normalArray(latLongBands, latLongBands),
@@ -168,7 +173,8 @@ public class Lab07 extends ApplicationAdapter {
         glViewport(0, 0, width, height);
         this.updateViewMatrix();
         this.updateProjectionMatrix(width, height);
-        this.bindMatricesToAllShaders();
+        this.updateProjViewMatrix();
+        this.bindCameraParamsToAllShaders();
     }
 
     @Override
@@ -181,19 +187,23 @@ public class Lab07 extends ApplicationAdapter {
         this.shaderPrograms.values().forEach(ShaderProgram::dispose);
     }
 
-    private void bindMatricesToAllShaders() {
-        this.shaderPrograms.values().forEach(this::bindMatricesToShader);
+    private void bindCameraParamsToAllShaders() {
+        this.shaderPrograms.values().forEach(this::bindCameraParamsToShader);
     }
 
-    private void bindMatricesToShader(ShaderProgram shaderProgram) {
+    private void bindCameraParamsToShader(ShaderProgram shaderProgram) {
         shaderProgram.bind();
-        final int mViewUniformLocation = shaderProgram.getUniformLocation("mView");
-        final int mProjUniformLocation = shaderProgram.getUniformLocation("mProj");
+        final int mProjViewUniformLocation = shaderProgram.getUniformLocation("cam.mProjView");
+        final int camPositionUniformLocation = shaderProgram.getUniformLocation("cam.position");
 
-        glUniformMatrix4fv(mViewUniformLocation, false, this.viewMatrix.asArray());
-        glUniformMatrix4fv(mProjUniformLocation, false, this.projMatrix.asArray());
+        glUniformMatrix4fv(mProjViewUniformLocation, false, this.projViewMatrix.asArray());
+        glUniform3fv(camPositionUniformLocation, this.cameraPosition.asArray());
 
         shaderProgram.unbind();
+    }
+
+    private void updateProjViewMatrix() {
+        this.projViewMatrix = Matrix4.mul(this.projMatrix, this.viewMatrix);
     }
 
     private void updateProjectionMatrix(int width, int height) {
@@ -205,9 +215,6 @@ public class Lab07 extends ApplicationAdapter {
     }
 
     private void updateViewMatrix() {
-        final Vector3 cameraPosition = new Vector3(0, 3, 7);
-        final Vector3 lookAtPosition = Vector3.origin();
-        final Vector3 cameraUpDirection = Vector3.y();
         this.viewMatrix = Matrix4.view(cameraPosition, lookAtPosition, cameraUpDirection);
     }
 

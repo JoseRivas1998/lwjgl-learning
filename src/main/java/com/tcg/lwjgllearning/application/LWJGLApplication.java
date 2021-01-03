@@ -1,6 +1,5 @@
 package com.tcg.lwjgllearning.application;
 
-import com.tcg.lwjgllearning.application.input.Input;
 import org.lwjgl.Version;
 
 import java.util.UUID;

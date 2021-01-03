@@ -10,11 +10,11 @@ import com.tcg.lwjgllearning.graphics.ShaderProgram;
 import com.tcg.lwjgllearning.graphics.Texture;
 import com.tcg.lwjgllearning.graphics.g3d.lighting.LightManager;
 import com.tcg.lwjgllearning.graphics.g3d.lighting.PointLight;
-import com.tcg.lwjgllearning.graphics.g3d.materials.RGBMaterial;
-import com.tcg.lwjgllearning.graphics.g3d.materials.UVMaterial;
+import com.tcg.lwjgllearning.graphics.g3d.materials.ColorPhongMaterial;
+import com.tcg.lwjgllearning.graphics.g3d.materials.ScalarPhongMaterial;
 import com.tcg.lwjgllearning.graphics.g3d.mesh.Mesh;
 import com.tcg.lwjgllearning.graphics.g3d.mesh.Shapes3D;
-import com.tcg.lwjgllearning.graphics.g3d.mesh.UVMesh;
+import com.tcg.lwjgllearning.graphics.g3d.mesh.TexturedMesh;
 import com.tcg.lwjgllearning.math.MathUtils;
 import com.tcg.lwjgllearning.math.Quaternion;
 import com.tcg.lwjgllearning.math.Vector3;
@@ -37,7 +37,7 @@ public class Lab08 extends ApplicationAdapter {
     private PointLight pointLight2;
     private Mesh emeraldSuzy;
     private Texture earthTexture;
-    private UVMesh uvEarth;
+    private TexturedMesh uvEarth;
     private Mesh lightSuzy1;
     private Mesh lightSuzy2;
     private Instant startTime;
@@ -78,7 +78,7 @@ public class Lab08 extends ApplicationAdapter {
         final Color emeraldAmbient = Color.rgb888(0x052C05);
         final float emeraldShininess = 0.2f;
 
-        final RGBMaterial emeraldMaterial = new RGBMaterial(
+        final ColorPhongMaterial emeraldMaterial = new ColorPhongMaterial(
                 this.shaderPrograms.get("rgbProgram"),
                 emeraldDiffuse,
                 emeraldSpecular,
@@ -95,7 +95,7 @@ public class Lab08 extends ApplicationAdapter {
         final float earthShininess = 0.1f;
         this.earthTexture = new Texture("textures/lab07/earth-texture.png");
 
-        final UVMaterial earthMaterial = new UVMaterial(
+        final ScalarPhongMaterial earthMaterial = new ScalarPhongMaterial(
                 this.shaderPrograms.get("uvProgram"),
                 earthDiffuse,
                 earthSpecular,
@@ -104,7 +104,7 @@ public class Lab08 extends ApplicationAdapter {
         );
 
         final int latLongBands = 30;
-        this.uvEarth = new UVMesh(
+        this.uvEarth = new TexturedMesh(
                 earthMaterial,
                 Shapes3D.Sphere.positionArray(latLongBands, latLongBands),
                 Shapes3D.Sphere.normalArray(latLongBands, latLongBands),

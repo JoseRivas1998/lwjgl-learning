@@ -12,19 +12,19 @@ import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 
-public class MultiColorDrawable extends Drawable{
+public class MultiColorMesh2D extends Mesh2D {
 
     private final float[] colorArray;
     private int colorVboId;
 
-    public MultiColorDrawable(ShaderProgram shaderProgram, float[] positionArray, int[] indexArray, Color[] colors, Vector2 position, float rotation, Vector2 scale) {
+    public MultiColorMesh2D(ShaderProgram shaderProgram, float[] positionArray, int[] indexArray, Color[] colors, Vector2 position, float rotation, Vector2 scale) {
         super(shaderProgram, positionArray, indexArray, position, rotation, scale);
         this.colorArray = Color.colorArrayToFloatArray(colors);
         this.createColorBuffer();
     }
 
 
-    public MultiColorDrawable(ShaderProgram shaderProgram, float[] positionArray, int[] indexArray, Color[] colors) {
+    public MultiColorMesh2D(ShaderProgram shaderProgram, float[] positionArray, int[] indexArray, Color[] colors) {
         this(shaderProgram, positionArray, indexArray, colors, new Vector2(0, 0), 0f, new Vector2(1, 1));
     }
 

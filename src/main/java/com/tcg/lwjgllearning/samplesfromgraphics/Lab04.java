@@ -4,7 +4,7 @@ import com.tcg.lwjgllearning.application.ApplicationAdapter;
 import com.tcg.lwjgllearning.application.LWJGLApplication;
 import com.tcg.lwjgllearning.graphics.Color;
 import com.tcg.lwjgllearning.graphics.ShaderProgram;
-import com.tcg.lwjgllearning.graphics.g3d.mesh.RGBMesh;
+import com.tcg.lwjgllearning.graphics.g3d.mesh.AttributeColorMesh;
 import com.tcg.lwjgllearning.graphics.g3d.mesh.Shapes3D;
 import com.tcg.lwjgllearning.graphics.g3d.mesh.UniformColorMesh;
 import com.tcg.lwjgllearning.math.MathUtils;
@@ -36,7 +36,7 @@ public class Lab04 extends ApplicationAdapter {
     private Vector3 origin;
     private Quaternion orbit;
     private Quaternion localRot;
-    private RGBMesh rgbCube;
+    private AttributeColorMesh rgbCube;
 
     @Override
     public void create() {
@@ -70,7 +70,7 @@ public class Lab04 extends ApplicationAdapter {
         final Color red = Color.rgb888(0xFF0000);
         final Color blue = Color.rgb888(0x0000FF);
         final Color[] cubeColorArray = Shapes3D.Box.colors(green, green, red, red, blue, blue);
-        this.rgbCube = new RGBMesh(
+        this.rgbCube = new AttributeColorMesh(
                 this.rgbShader,
                 cubePositionArray,
                 cubeNormalArray,

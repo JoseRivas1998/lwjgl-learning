@@ -1,5 +1,6 @@
 package com.tcg.lwjgllearning.graphics.g2d;
 
+import com.tcg.lwjgllearning.graphics.Drawable;
 import com.tcg.lwjgllearning.graphics.ShaderProgram;
 import com.tcg.lwjgllearning.math.Transform2D;
 import com.tcg.lwjgllearning.math.Vector2;
@@ -14,7 +15,7 @@ import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
 
-public abstract class Drawable extends Transform2D implements Disposable {
+public abstract class Mesh2D extends Transform2D implements Disposable, Drawable {
 
     protected final ShaderProgram shaderProgram;
     protected final float[] positionArray;
@@ -26,7 +27,7 @@ public abstract class Drawable extends Transform2D implements Disposable {
     private int positionVboId;
     private int indexVboId;
 
-    public Drawable(ShaderProgram shaderProgram, float[] positionArray, int[] indexArray, Vector2 position, float rotation, Vector2 scale) {
+    public Mesh2D(ShaderProgram shaderProgram, float[] positionArray, int[] indexArray, Vector2 position, float rotation, Vector2 scale) {
         super(position, rotation, scale);
         this.shaderProgram = shaderProgram;
         this.positionArray = Arrays.copyOf(positionArray, positionArray.length);
@@ -34,7 +35,7 @@ public abstract class Drawable extends Transform2D implements Disposable {
         this.createBuffers();
     }
 
-    public Drawable(ShaderProgram shaderProgram, float[] positionArray, int[] indexArray) {
+    public Mesh2D(ShaderProgram shaderProgram, float[] positionArray, int[] indexArray) {
         this(shaderProgram, positionArray, indexArray, new Vector2(), 0f, new Vector2(1, 1));
     }
 
