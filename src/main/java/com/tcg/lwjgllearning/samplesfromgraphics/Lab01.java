@@ -14,7 +14,6 @@ import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
-import static org.lwjgl.system.MemoryUtil.memFree;
 
 public class Lab01 extends ApplicationAdapter {
 

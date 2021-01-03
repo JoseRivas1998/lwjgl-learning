@@ -1,31 +1,35 @@
-package com.tcg.lwjgllearning.graphics.g2d;
+package com.tcg.lwjgllearning.graphics.g3d.mesh;
 
 import com.tcg.lwjgllearning.graphics.Color;
 import com.tcg.lwjgllearning.graphics.ShaderProgram;
-import com.tcg.lwjgllearning.math.Vector2;
+import com.tcg.lwjgllearning.math.Quaternion;
+import com.tcg.lwjgllearning.math.Vector3;
 import org.lwjgl.system.MemoryUtil;
 
 import java.nio.FloatBuffer;
 
+import static org.lwjgl.opengl.GL11.GL_FLOAT;
 import static org.lwjgl.opengl.GL15.*;
+import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
 import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 
-public class MultiColorDrawable extends Drawable{
+public class AttributeColorMesh extends Mesh {
 
     private final float[] colorArray;
     private int colorVboId;
 
-    public MultiColorDrawable(ShaderProgram shaderProgram, float[] positionArray, int[] indexArray, Color[] colors, Vector2 position, float rotation, Vector2 scale) {
-        super(shaderProgram, positionArray, indexArray, position, rotation, scale);
+    public AttributeColorMesh(ShaderProgram shaderProgram, float[] positionArray, float[] normalArray, int[] indexArray, Color[] colors,
+                   Vector3 position, Quaternion rotation, Vector3 scale) {
+        super(shaderProgram, positionArray, normalArray, indexArray, position, rotation, scale);
         this.colorArray = Color.colorArrayToFloatArray(colors);
         this.createColorBuffer();
     }
 
-
-    public MultiColorDrawable(ShaderProgram shaderProgram, float[] positionArray, int[] indexArray, Color[] colors) {
-        this(shaderProgram, positionArray, indexArray, colors, new Vector2(0, 0), 0f, new Vector2(1, 1));
+    public AttributeColorMesh(ShaderProgram shaderProgram, float[] positionArray, float[] normalArray, int[] indexArray, Color[] colors) {
+        this(shaderProgram, positionArray, normalArray, indexArray, colors,
+                Vector3.origin(), new Quaternion(), new Vector3(1, 1, 1));
     }
 
     private void createColorBuffer() {
@@ -37,9 +41,10 @@ public class MultiColorDrawable extends Drawable{
             colorBuffer = MemoryUtil.memAllocFloat(this.colorArray.length);
             colorBuffer.put(this.colorArray).flip();
 
-            this.colorVboId = glGenBuffers();
+            this.colorVboId = this.createAttributeBuffer(Attribute.COLOR);
             glBindBuffer(GL_ARRAY_BUFFER, this.colorVboId);
             glBufferData(GL_ARRAY_BUFFER, colorBuffer, GL_STATIC_DRAW);
+
             int colorAttribLocation = this.shaderProgram.getAttribLocation("vertColor");
             glEnableVertexAttribArray(colorAttribLocation);
             glVertexAttribPointer(colorAttribLocation, 4, GL_FLOAT, false, 0, 0);
@@ -52,9 +57,17 @@ public class MultiColorDrawable extends Drawable{
         }
     }
 
+    public void activateAttribute(Attribute attribute, int attributeLocation) {
+        this.activateAttribute4f(attribute, attributeLocation);
+    }
+
     @Override
     public void dispose() {
         glDeleteBuffers(this.colorVboId);
         super.dispose();
+    }
+
+    public static enum Attribute implements AbstractAttribute {
+        COLOR
     }
 }

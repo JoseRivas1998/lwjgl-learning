@@ -3,9 +3,10 @@ package com.tcg.lwjgllearning.graphics.g3d.materials;
 import com.tcg.lwjgllearning.graphics.ShaderProgram;
 
 public abstract class Material {
-    public final ShaderProgram shaderProgram;
 
-    public Material(ShaderProgram shaderProgram) {
+    final public ShaderProgram shaderProgram;
+
+    protected Material (ShaderProgram shaderProgram) {
         this.shaderProgram = shaderProgram;
     }
 

@@ -4,7 +4,7 @@ import com.tcg.lwjgllearning.application.ApplicationAdapter;
 import com.tcg.lwjgllearning.application.LWJGLApplication;
 import com.tcg.lwjgllearning.graphics.ShaderProgram;
 import com.tcg.lwjgllearning.graphics.Texture;
-import com.tcg.lwjgllearning.graphics.g3d.mesh.UVMesh;
+import com.tcg.lwjgllearning.graphics.g3d.mesh.TexturedMesh;
 import com.tcg.lwjgllearning.math.MathUtils;
 import com.tcg.lwjgllearning.math.Matrix4;
 import com.tcg.lwjgllearning.math.Quaternion;
@@ -35,13 +35,13 @@ public class Lab06 extends ApplicationAdapter {
 
     private final Map<String, ShaderProgram> shaders = new HashMap<>();
     private Texture suzyTexture;
-    private UVMesh suzyMesh;
+    private TexturedMesh suzyMesh;
     private Texture cubeTexture;
-    private UVMesh cubeMesh;
+    private TexturedMesh cubeMesh;
     private Texture r2Texture;
-    private UVMesh r2Mesh;
+    private TexturedMesh r2Mesh;
     private Texture stopSignTexture;
-    private UVMesh stopSignMesh;
+    private TexturedMesh stopSignMesh;
 
     @Override
     public void create() {
@@ -53,17 +53,17 @@ public class Lab06 extends ApplicationAdapter {
         this.updateLightingAndMatrices(300, 300);
 
         this.suzyTexture = new Texture("textures/lab06/suzy2-texture.png", true);
-        this.suzyMesh = OBJModel.uvOBJ("models/lab06/suzy2.obj",
+        this.suzyMesh = OBJModel.textureOBJ("models/lab06/suzy2.obj",
                 this.shaders.get("uvProgram"), this.suzyTexture);
 
         this.cubeTexture = new Texture("textures/lab06/cube-texture.png", true);
-        this.cubeMesh = OBJModel.uvOBJ("models/lab06/cube.obj", this.shaders.get("uvProgram"), this.cubeTexture);
+        this.cubeMesh = OBJModel.textureOBJ("models/lab06/cube.obj", this.shaders.get("uvProgram"), this.cubeTexture);
 
         this.r2Texture = new Texture("textures/lab06/r2d2-texture.png", true);
-        this.r2Mesh = OBJModel.uvOBJ("models/lab06/r2unit.obj", this.shaders.get("uvProgram"), this.r2Texture);
+        this.r2Mesh = OBJModel.textureOBJ("models/lab06/r2unit.obj", this.shaders.get("uvProgram"), this.r2Texture);
 
         this.stopSignTexture = new Texture("textures/lab06/stopSign-texture.png", true);
-        this.stopSignMesh = OBJModel.uvOBJ("models/lab06/stopSign.obj",
+        this.stopSignMesh = OBJModel.textureOBJ("models/lab06/stopSign.obj",
                 this.shaders.get("uvProgram"), this.stopSignTexture);
 
         this.suzyMesh.translate(new Vector3(-2, 0, 0));

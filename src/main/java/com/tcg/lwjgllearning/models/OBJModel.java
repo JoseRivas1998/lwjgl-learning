@@ -4,8 +4,9 @@ import com.tcg.lwjgllearning.graphics.Color;
 import com.tcg.lwjgllearning.graphics.ShaderProgram;
 import com.tcg.lwjgllearning.graphics.Texture;
 import com.tcg.lwjgllearning.graphics.g3d.materials.Material;
-import com.tcg.lwjgllearning.graphics.g3d.mesh.Mesh;
-import com.tcg.lwjgllearning.graphics.g3d.mesh.UVMesh;
+import com.tcg.lwjgllearning.graphics.g3d.materials.ScalarPhongMaterial;
+import com.tcg.lwjgllearning.graphics.g3d.mesh.MaterialMesh;
+import com.tcg.lwjgllearning.graphics.g3d.mesh.TexturedMesh;
 import com.tcg.lwjgllearning.graphics.g3d.mesh.UniformColorMesh;
 import com.tcg.lwjgllearning.math.Vector2;
 import com.tcg.lwjgllearning.math.Vector3;
@@ -75,21 +76,26 @@ public class OBJModel extends Model {
         return new UniformColorMesh(program, objModel.vertices, objModel.normals, objModel.indices, color);
     }
 
-    public static UVMesh uvOBJ(String filepath, ShaderProgram program, Texture texture) {
-        return uvOBJ(new OBJModel(filepath), program, texture);
+    public static TexturedMesh textureOBJ(String filepath, ShaderProgram program, Texture texture) {
+        return textureOBJ(new OBJModel(filepath), program, texture);
     }
 
-    public static UVMesh uvOBJ(OBJModel objModel, ShaderProgram program, Texture texture) {
-        return new UVMesh(program, objModel.vertices, objModel.normals, objModel.indices,
+    public static TexturedMesh textureOBJ(OBJModel objModel, ShaderProgram program, Texture texture) {
+        return new TexturedMesh(program, objModel.vertices, objModel.normals, objModel.indices,
                 objModel.textureCoordinates, texture);
     }
 
-    public static Mesh meshOBJ(String filepath, Material material) {
+    public static TexturedMesh texturedOBJ(OBJModel objModel, ScalarPhongMaterial material, Texture texture) {
+        return new TexturedMesh(material, objModel.vertices, objModel.normals, objModel.indices,
+                objModel.textureCoordinates, texture);
+    }
+
+    public static MaterialMesh meshOBJ(String filepath, Material material) {
         return meshOBJ(new OBJModel(filepath), material);
     }
 
-    public static Mesh meshOBJ(OBJModel objModel, Material material) {
-        return new Mesh(material, objModel.vertices, objModel.normals, objModel.indices);
+    public static MaterialMesh meshOBJ(OBJModel objModel, Material material) {
+        return new MaterialMesh(material, objModel.vertices, objModel.normals, objModel.indices);
     }
 
     private int parseFace(List<Vector3> objVertices, List<Vector2> objTextureCoordinates, List<Vector3> objNormals,

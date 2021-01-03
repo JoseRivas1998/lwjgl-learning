@@ -1,28 +1,28 @@
 package com.tcg.lwjgllearning.graphics.g3d.mesh;
 
 import com.tcg.lwjgllearning.graphics.ShaderProgram;
-import com.tcg.lwjgllearning.graphics.g3d.materials.Material;
 import com.tcg.lwjgllearning.math.Quaternion;
-import com.tcg.lwjgllearning.math.Transform3D;
 import com.tcg.lwjgllearning.math.Vector3;
-import com.tcg.lwjgllearning.utils.Disposable;
 import org.lwjgl.system.MemoryUtil;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Objects;
 
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
 
-public class Mesh extends Transform3D implements Disposable {
+public class Mesh extends AbstractMesh {
 
     protected final float[] positionArray;
     protected final float[] normalArray;
     protected final int[] indexArray;
-    protected final Material material;
+
+    protected final ShaderProgram shaderProgram;
+
     protected int mWorldUniformLocation;
     protected int mNormalUniformLocation;
     protected int positionAttribLocation;
@@ -33,9 +33,9 @@ public class Mesh extends Transform3D implements Disposable {
     protected int normalVboId;
     protected int indexVboId;
 
-    public Mesh(Material material, float[] positionArray, float[] normalArray, int[] indexArray, Vector3 position, Quaternion rotation, Vector3 scale) {
+    public Mesh(ShaderProgram shaderProgram, float[] positionArray, float[] normalArray, int[] indexArray, Vector3 position, Quaternion rotation, Vector3 scale) {
         super(position, rotation, scale);
-        this.material = material;
+        this.shaderProgram = shaderProgram;
         this.positionArray = Arrays.copyOf(Objects.requireNonNull(positionArray), positionArray.length);
         this.normalArray = Arrays.copyOf(Objects.requireNonNull(normalArray), normalArray.length);
         this.indexArray = Arrays.copyOf(Objects.requireNonNull(indexArray), indexArray.length);
@@ -43,8 +43,8 @@ public class Mesh extends Transform3D implements Disposable {
         this.createBuffers();
     }
 
-    public Mesh(Material material, float[] positionArray, float[] normalArray, int[] indexArray) {
-        this(material, positionArray, normalArray, indexArray,
+    public Mesh(ShaderProgram shaderProgram, float[] positionArray, float[] normalArray, int[] indexArray) {
+        this(shaderProgram, positionArray, normalArray, indexArray,
                 Vector3.origin(), new Quaternion(), new Vector3(1, 1, 1));
     }
 
@@ -54,8 +54,8 @@ public class Mesh extends Transform3D implements Disposable {
         IntBuffer indexBuffer = null;
 
         try {
-            this.mWorldUniformLocation = this.material.shaderProgram.getUniformLocation("mWorld");
-            this.mNormalUniformLocation = this.material.shaderProgram.getUniformLocation("mNormal");
+            this.mWorldUniformLocation = this.shaderProgram.getUniformLocation("mWorld");
+            this.mNormalUniformLocation = this.shaderProgram.getUniformLocation("mNormal");
 
 
             this.vaoId = glGenVertexArrays();
@@ -64,8 +64,10 @@ public class Mesh extends Transform3D implements Disposable {
             positionBuffer = MemoryUtil.memAllocFloat(this.positionArray.length);
             positionBuffer.put(this.positionArray).flip();
 
-            this.positionAttribLocation = this.material.shaderProgram.getAttribLocation("vertPosition");
-            this.positionVboId = glGenBuffers();
+            this.attributeBufferMap = new HashMap<>();
+
+            this.positionAttribLocation = this.shaderProgram.getAttribLocation("vertPosition");
+            this.positionVboId = createAttributeBuffer(Attribute.POSITION);
             glBindBuffer(GL_ARRAY_BUFFER, this.positionVboId);
             glBufferData(GL_ARRAY_BUFFER, positionBuffer, GL_STATIC_DRAW);
             glEnableVertexAttribArray(this.positionAttribLocation);
@@ -74,11 +76,12 @@ public class Mesh extends Transform3D implements Disposable {
             normalBuffer = MemoryUtil.memAllocFloat(this.normalArray.length);
             normalBuffer.put(this.normalArray).flip();
 
-            this.normalAttribLocation = this.material.shaderProgram.getAttribLocation("vertNormal");
-            this.normalVboId = glGenBuffers();
+            this.normalAttribLocation = this.shaderProgram.getAttribLocation("vertNormal");
+            glEnableVertexAttribArray(this.normalAttribLocation);
+
+            this.normalVboId = createAttributeBuffer(Attribute.NORMAL);
             glBindBuffer(GL_ARRAY_BUFFER, this.normalVboId);
             glBufferData(GL_ARRAY_BUFFER, normalBuffer, GL_STATIC_DRAW);
-            glEnableVertexAttribArray(this.normalAttribLocation);
             glVertexAttribPointer(this.normalAttribLocation, 3, GL_FLOAT, false, 0, 0);
 
             indexBuffer = MemoryUtil.memAllocInt(this.indexArray.length);
@@ -103,13 +106,18 @@ public class Mesh extends Transform3D implements Disposable {
         }
     }
 
-    public void activate() {
+    protected int createAttributeBuffer(AbstractAttribute attribute) {
+        int vboId = glGenBuffers();
+        this.attributeBufferMap.put(attribute, vboId);
+        return vboId;
+    }
+
+    protected void activate() {
         this.update();
-        this.material.shaderProgram.bind();
+        this.shaderProgram.bind();
         glBindVertexArray(this.vaoId);
         glUniformMatrix4fv(this.mWorldUniformLocation, false, this.worldMatrix());
         glUniformMatrix3fv(this.mNormalUniformLocation, false, this.normalMatrix());
-        this.material.activate();
     }
 
     public void draw() {
@@ -118,10 +126,17 @@ public class Mesh extends Transform3D implements Disposable {
         this.deactivate();
     }
 
-    public void deactivate() {
-        this.material.deactivate();
+    protected void deactivate() {
         glBindVertexArray(0);
-        this.material.shaderProgram.unbind();
+        this.shaderProgram.unbind();
+    }
+
+    public void activateAttribute(Attribute attribute, int attributeLocation) {
+        activateAttribute3f((AbstractAttribute) attribute, attributeLocation);
+    }
+
+    public void bindIndexBuffer() {
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this.indexVboId);
     }
 
     @Override
@@ -130,5 +145,10 @@ public class Mesh extends Transform3D implements Disposable {
         glDeleteBuffers(this.normalVboId);
         glDeleteBuffers(this.indexVboId);
         glDeleteVertexArrays(this.vaoId);
+    }
+
+    public static enum Attribute implements AbstractAttribute {
+        POSITION,
+        NORMAL
     }
 }

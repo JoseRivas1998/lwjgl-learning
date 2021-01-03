@@ -5,9 +5,9 @@ import com.tcg.lwjgllearning.application.LWJGLApplication;
 import com.tcg.lwjgllearning.graphics.Color;
 import com.tcg.lwjgllearning.graphics.ShaderProgram;
 import com.tcg.lwjgllearning.graphics.Texture;
-import com.tcg.lwjgllearning.graphics.g3d.mesh.RGBMesh;
+import com.tcg.lwjgllearning.graphics.g3d.mesh.AttributeColorMesh;
 import com.tcg.lwjgllearning.graphics.g3d.mesh.Shapes3D;
-import com.tcg.lwjgllearning.graphics.g3d.mesh.UVMesh;
+import com.tcg.lwjgllearning.graphics.g3d.mesh.TexturedMesh;
 import com.tcg.lwjgllearning.graphics.g3d.mesh.UniformColorMesh;
 import com.tcg.lwjgllearning.math.MathUtils;
 import com.tcg.lwjgllearning.math.Matrix4;
@@ -58,13 +58,13 @@ public class Lab05 extends ApplicationAdapter {
     private Matrix4 projMatrix;
 
     private final Map<String, ShaderProgram> shaders = new HashMap<>();
-    private RGBMesh rgbCube;
+    private AttributeColorMesh rgbCube;
     private UniformColorMesh yellowCube;
     private UniformColorMesh purpleSphere;
     private Texture radioactiveCrateTexture;
-    private UVMesh radioactiveCrate;
+    private TexturedMesh radioactiveCrate;
     private Texture unwrappedCubeTexture;
-    private UVMesh testCube;
+    private TexturedMesh testCube;
 
     @Override
     public void create() {
@@ -83,7 +83,7 @@ public class Lab05 extends ApplicationAdapter {
 
         this.updateLightingAndMatrices(300, 300);
 
-        this.rgbCube = new RGBMesh(
+        this.rgbCube = new AttributeColorMesh(
                 this.shaders.get("rgbProgram"),
                 Shapes3D.Box.positionArray(),
                 Shapes3D.Box.normalArray(),
@@ -118,7 +118,7 @@ public class Lab05 extends ApplicationAdapter {
         this.purpleSphere.translate(new Vector3(0, 0, -5));
 
         this.radioactiveCrateTexture = new Texture("textures/lab05/radioactive-crate.png");
-        this.radioactiveCrate = new UVMesh(
+        this.radioactiveCrate = new TexturedMesh(
                 this.shaders.get("uvProgram"),
                 Shapes3D.Box.positionArray(),
                 Shapes3D.Box.normalArray(),
@@ -129,7 +129,7 @@ public class Lab05 extends ApplicationAdapter {
         this.radioactiveCrate.translate(new Vector3(5, 0, 0));
 
         this.unwrappedCubeTexture = new Texture("textures/lab05/unwrapped-cube.png");
-        this.testCube = new UVMesh(
+        this.testCube = new TexturedMesh(
                 this.shaders.get("uvProgram"),
                 Shapes3D.Box.positionArray(),
                 Shapes3D.Box.normalArray(),
