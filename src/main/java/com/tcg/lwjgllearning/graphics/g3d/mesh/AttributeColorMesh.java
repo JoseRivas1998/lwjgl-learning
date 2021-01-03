@@ -67,7 +67,7 @@ public class AttributeColorMesh extends Mesh {
         super.dispose();
     }
 
-    public static enum Attribute implements AbstractAttribute {
+    public enum Attribute implements AbstractAttribute {
         COLOR
     }
 }

@@ -67,7 +67,7 @@ public class Mesh extends AbstractMesh {
             this.attributeBufferMap = new HashMap<>();
 
             this.positionAttribLocation = this.shaderProgram.getAttribLocation("vertPosition");
-            this.positionVboId = createAttributeBuffer(Attribute.POSITION);
+            this.positionVboId = this.createAttributeBuffer(Attribute.POSITION);
             glBindBuffer(GL_ARRAY_BUFFER, this.positionVboId);
             glBufferData(GL_ARRAY_BUFFER, positionBuffer, GL_STATIC_DRAW);
             glEnableVertexAttribArray(this.positionAttribLocation);
@@ -79,7 +79,7 @@ public class Mesh extends AbstractMesh {
             this.normalAttribLocation = this.shaderProgram.getAttribLocation("vertNormal");
             glEnableVertexAttribArray(this.normalAttribLocation);
 
-            this.normalVboId = createAttributeBuffer(Attribute.NORMAL);
+            this.normalVboId = this.createAttributeBuffer(Attribute.NORMAL);
             glBindBuffer(GL_ARRAY_BUFFER, this.normalVboId);
             glBufferData(GL_ARRAY_BUFFER, normalBuffer, GL_STATIC_DRAW);
             glVertexAttribPointer(this.normalAttribLocation, 3, GL_FLOAT, false, 0, 0);
@@ -147,7 +147,7 @@ public class Mesh extends AbstractMesh {
         glDeleteVertexArrays(this.vaoId);
     }
 
-    public static enum Attribute implements AbstractAttribute {
+    public enum Attribute implements AbstractAttribute {
         POSITION,
         NORMAL
     }
