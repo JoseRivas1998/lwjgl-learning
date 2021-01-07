@@ -73,12 +73,12 @@ public class Lab07_v2 extends ApplicationAdapter {
         this.shaderPrograms.put("uvProgram", ShaderProgram.buildShader(
                 FileUtils.readFile("sample_shaders/lab07_v2/vert.uv.glsl"),
                 FileUtils.readFile("sample_shaders/lab07_v2/frag.uv.glsl"),
-                lightManager
+                this.lightManager
         ));
         this.shaderPrograms.put("rgbProgram", ShaderProgram.buildShader(
                 FileUtils.readFile("sample_shaders/lab07_v2/vert.rgb.glsl"),
                 FileUtils.readFile("sample_shaders/lab07_v2/frag.rgb.glsl"),
-                lightManager
+                this.lightManager
         ));
 
         this.lightManager.update();
@@ -218,7 +218,7 @@ public class Lab07_v2 extends ApplicationAdapter {
     }
 
     private void updateViewMatrix() {
-        this.viewMatrix = Matrix4.view(cameraPosition, lookAtPosition, cameraUpDirection);
+        this.viewMatrix = Matrix4.view(this.cameraPosition, this.lookAtPosition, this.cameraUpDirection);
     }
 
     public static void main(String[] args) {
