@@ -61,6 +61,7 @@ public class TexturedMesh extends MaterialMesh {
             texCoordBuffer.put(this.uvArray).flip();
 
             texCoordVboId = this.createAttributeBuffer(Attribute.TEXTURE_COORDINATE);
+            glBindBuffer(GL_ARRAY_BUFFER, texCoordVboId);
             glBufferData(GL_ARRAY_BUFFER, texCoordBuffer, GL_STATIC_DRAW);
             glEnableVertexAttribArray(this.texCoordAttribLocation);
             glVertexAttribPointer(this.texCoordAttribLocation, 2, GL_FLOAT, false, 0, 0);
