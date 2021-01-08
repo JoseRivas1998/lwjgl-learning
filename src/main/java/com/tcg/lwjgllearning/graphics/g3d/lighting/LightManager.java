@@ -13,50 +13,39 @@ import static org.lwjgl.opengl.GL20.glUniform3fv;
 
 public class LightManager {
 
-    private static final int DEFAULT_MAX_PER_LIGHT = 16;
     private static final Vector3 DEFAULT_AMBIENT_LIGHT = new Vector3(0.2f, 0.3f, 0.2f);
 
     private final List<ShaderAmbientUniformLocation> programs = new ArrayList<>();
     private final float[] ambientLight = new float[3];
 
-    private final int maxPerLight;
     private final List<PhongLight<?>> lights = new ArrayList<>();
 
     private int pointLightIndex;
     private int directionalLightIndex;
 
+    public LightManager() {
+        this(DEFAULT_AMBIENT_LIGHT);
+    }
+
+    public LightManager(Vector3 ambientLight) {
+        System.arraycopy(ambientLight.asArray(), 0, this.ambientLight, 0, this.ambientLight.length);
+    }
+
     public LightManager(ShaderProgram[] shaderPrograms) {
-        this(DEFAULT_MAX_PER_LIGHT, Arrays.asList(shaderPrograms), DEFAULT_AMBIENT_LIGHT);
+        this(Arrays.asList(shaderPrograms), DEFAULT_AMBIENT_LIGHT);
     }
 
     public LightManager(Collection<ShaderProgram> shaderPrograms) {
-        this(DEFAULT_MAX_PER_LIGHT, shaderPrograms, DEFAULT_AMBIENT_LIGHT);
+        this(shaderPrograms, DEFAULT_AMBIENT_LIGHT);
     }
 
     public LightManager(ShaderProgram[] shaderPrograms, Vector3 ambientLight) {
-        this(DEFAULT_MAX_PER_LIGHT, Arrays.asList(shaderPrograms), ambientLight);
+        this(Arrays.asList(shaderPrograms), ambientLight);
     }
 
     public LightManager(Collection<ShaderProgram> shaderPrograms, Vector3 ambientLight) {
-        this(DEFAULT_MAX_PER_LIGHT, shaderPrograms, ambientLight);
-    }
 
-    public LightManager(int maxPerLight, ShaderProgram[] shaderPrograms) {
-        this(maxPerLight, Arrays.asList(shaderPrograms), DEFAULT_AMBIENT_LIGHT);
-    }
-
-    public LightManager(int maxPerLight, Collection<ShaderProgram> shaderPrograms) {
-        this(maxPerLight, shaderPrograms, DEFAULT_AMBIENT_LIGHT);
-    }
-
-    public LightManager(int maxPerLight, ShaderProgram[] shaderPrograms, Vector3 ambientLight) {
-        this(maxPerLight, Arrays.asList(shaderPrograms), ambientLight);
-    }
-
-    public LightManager(int maxPerLight, Collection<ShaderProgram> shaderPrograms, Vector3 ambientLight) {
-        this.maxPerLight = maxPerLight;
-
-        System.arraycopy(ambientLight.asArray(), 0, this.ambientLight, 0, this.ambientLight.length);
+        this(ambientLight);
 
         this.programs.addAll(shaderPrograms.stream()
                 .map(this::buildShaderUniformLocation)
@@ -77,7 +66,6 @@ public class LightManager {
     }
 
     public PointLight addPointLight(Vector3 position, Vector3 diffuse, Vector3 specular, Vector3 ambient) {
-        this.enforcePointLightCapacity();
         final PointLight pointLight = new PointLight(this.mapUniformLocationsToPrograms(), this.pointLightIndex++,
                 position, diffuse, specular, ambient);
         this.lights.add(pointLight);
@@ -89,7 +77,6 @@ public class LightManager {
     }
 
     public DirectionalLight addDirectionalLight(Vector3 direction, Vector3 diffuse, Vector3 specular, Vector3 ambient) {
-        this.enforceDirectionalLightCapacity();
         final DirectionalLight directionalLight = new DirectionalLight(this.mapUniformLocationsToPrograms(),
                 this.directionalLightIndex++, direction, diffuse, specular, ambient);
         this.lights.add(directionalLight);
@@ -104,22 +91,10 @@ public class LightManager {
         this.lights.forEach(PhongLight::update);
     }
 
-    private void enforceDirectionalLightCapacity() {
-        if (this.directionalLightIndex >= this.maxPerLight) {
-            throw new IllegalStateException("Cannot add anymore directional lights.");
-        }
-    }
-
     private List<ShaderProgram> mapUniformLocationsToPrograms() {
         return this.programs.stream()
                 .map(shaderAmbientUniformLocation -> shaderAmbientUniformLocation.program)
                 .collect(Collectors.toUnmodifiableList());
-    }
-
-    private void enforcePointLightCapacity() {
-        if (this.pointLightIndex >= this.maxPerLight){
-            throw new IllegalStateException("Cannot add any more point lights.");
-        }
     }
 
     private void updateAmbientLight(ShaderAmbientUniformLocation shaderAmbientUniformLocation) {
@@ -147,5 +122,11 @@ public class LightManager {
         public int ambientUniformLocation;
     }
 
-
+    public String processShaderString(String shaderString) {
+        return shaderString.replaceAll(
+            "#POINT_LIGHT_COUNT", "" + Math.max(this.pointLightIndex, 1)
+        ).replaceAll(
+            "#DIRECTIONAL_LIGHT_COUNT", "" + Math.max(this.directionalLightIndex, 1)
+        );
+    }
 }

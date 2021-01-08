@@ -1,5 +1,6 @@
 package com.tcg.lwjgllearning.graphics;
 
+import com.tcg.lwjgllearning.graphics.g3d.lighting.LightManager;
 import com.tcg.lwjgllearning.utils.Disposable;
 
 import static org.lwjgl.opengl.GL20.*;
@@ -29,6 +30,16 @@ public class ShaderProgram implements Disposable {
         ShaderProgram shaderProgram = new ShaderProgram();
         shaderProgram.compile(vertexShader, fragmentShader);
         shaderProgram.link();
+        return shaderProgram;
+    }
+    
+    public static ShaderProgram buildShader(String vertexShader, String fragmentShader, LightManager lightManager) {
+        vertexShader = lightManager.processShaderString(vertexShader);
+        fragmentShader = lightManager.processShaderString(fragmentShader);
+        ShaderProgram shaderProgram = new ShaderProgram();
+        shaderProgram.compile(vertexShader, fragmentShader);
+        shaderProgram.link();
+        lightManager.addProgram(shaderProgram);
         return shaderProgram;
     }
 
